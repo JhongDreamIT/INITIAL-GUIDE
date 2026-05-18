@@ -148,6 +148,7 @@
             box-shadow: 0 10px 25px rgba(225, 29, 72, 0.2);
             position: relative;
             overflow: hidden;
+            box-sizing: border-box;
         }
 
         .warning-box::before {
@@ -209,6 +210,7 @@
             opacity: 0;
             animation: slideUpFade 0.8s forwards;
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            box-sizing: border-box;
         }
 
         /* Alternating sides */
@@ -249,6 +251,7 @@
             z-index: 5;
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
             transition: all 0.5s cubic-bezier(0.68, -0.55, 0.26, 1.55);
+            box-sizing: border-box;
         }
 
         .step-card:nth-child(odd) .step-icon {
@@ -300,6 +303,7 @@
         ul {
             list-style-type: none;
             padding-left: 0;
+            margin-bottom: 0;
         }
 
         li {
@@ -308,6 +312,7 @@
             position: relative;
             font-size: 1.1rem;
             transition: transform 0.2s ease;
+            word-wrap: break-word;
         }
 
         li:hover {
@@ -344,6 +349,7 @@
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
             transition: all 0.3s ease;
             animation: pulseBtn 2s infinite;
+            text-align: center;
         }
 
         .action-btn::after {
@@ -368,44 +374,63 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        /* --- MOBILE RESPONSIVENESS (MAINTAINING ZIG-ZAG LAYOUT) --- */
         @media (max-width: 850px) {
-            .timeline::before {
-                left: 40px; /* Move line to left edge */
-            }
+            .header-top h1 { font-size: 2rem; }
+            .header-top p { font-size: 1rem; }
+            
+            .warning-box { font-size: 1rem; padding: 15px; margin: 15px; }
+            .warning-box span { font-size: 2rem; }
 
+            .timeline { margin: 30px auto; padding: 10px; max-width: 100vw; overflow: hidden; }
+            
+            /* Keep the left-and-right structure but shrink margins and paddings */
             .step-card {
-                width: calc(100% - 90px);
-                margin-left: 90px !important;
-                left: 0 !important;
+                width: calc(50% - 25px);
+                padding: 15px;
+                margin-bottom: 30px;
+                border-radius: 15px;
+            }
+            .step-card:nth-child(even) {
+                left: calc(50% + 25px);
             }
 
-            .step-card:nth-child(odd), .step-card:nth-child(even) {
-                transform-origin: left center;
+            /* Shrink icons and adjust positions */
+            .step-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                top: 15px;
+                border-width: 3px !important;
             }
+            .step-card:nth-child(odd) .step-icon { right: -45px; }
+            .step-card:nth-child(even) .step-icon { left: -45px; }
 
-            /* Fix Icon positions for mobile */
-            .step-card:nth-child(odd) .step-icon,
-            .step-card:nth-child(even) .step-icon {
-                left: -70px;
-                right: auto;
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
+            /* Shrink connecting arrows */
+            .step-card::after {
                 top: 25px;
+                border-width: 10px;
             }
-
-            /* Fix arrows for mobile */
-            .step-card:nth-child(odd)::after,
+            .step-card:nth-child(odd)::after {
+                right: -10px;
+                border-left: 10px solid rgba(255,255,255,0.85);
+            }
             .step-card:nth-child(even)::after {
-                left: -15px;
-                right: auto;
-                border-left: none;
-                border-right: 15px solid rgba(255,255,255,0.85);
+                left: -10px;
+                border-right: 10px solid rgba(255,255,255,0.85);
             }
 
-            .header-top h1 { font-size: 2.2rem; }
-            .action-btn { display: block; text-align: center; margin-top: 15px; }
+            /* Adjust text to fit tiny screens */
+            h3 { font-size: 1.1rem; padding-bottom: 5px; }
+            li { font-size: 0.85rem; margin-bottom: 10px; padding-left: 20px; }
+            li::before { top: 0; font-size: 0.85rem; }
+            
+            .action-btn { 
+                padding: 8px 12px; 
+                font-size: 0.8rem; 
+                display: block; 
+                margin: 10px auto 0;
+            }
         }
     </style>
 </head>
@@ -747,7 +772,7 @@
                                <li><strong>I-20 양식</strong> (미국 입국에 필요한 매우 중요한 정부 문서).</li>`,
                 step3Content: `<li><strong>SEVIS 수수료 납부:</strong> 온라인으로 "I-901 수수료"를 납부하고 영수증을 출력하세요.</li>
                                <li><strong>인터뷰 예약:</strong> 가장 가까운 미국 대사관/영사관에 인터뷰를 예약하세요.</li>
-                               <li><strong>인터뷰 참석:</strong> 서류를 지참하고 인터뷰에 합격하여 F-1 비자 스탬프를 받으세요!</li>`,
+                               <li><strong>인터뷰 참석:</strong> 서류 지참하고 인터뷰에 합격하여 F-1 비자 스탬프를 받으세요!</li>`,
                 step4Content: `<li><strong>미국으로 출국:</strong> 입국 심사관에게 여권, 비자 및 I-20 양식을 보여주세요.</li>
                                <li><strong>학교 방문:</strong> 시작일 전에 DreamIT ESL에 직접 방문하여 보고하세요.</li>
                                <li><strong>레벨 테스트:</strong> 본인에게 맞는 수업을 찾기 위해 배치 고사를 치르세요.</li>
