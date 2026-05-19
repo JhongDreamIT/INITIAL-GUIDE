@@ -3,824 +3,723 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DreamIT ESL - Student Guide</title>
+    <title>DreamIT ESL — Student Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap');
-
         :root {
-            --primary: #4f46e5;
-            --secondary: #ec4899;
-            --bg-gradient-1: #e0e7ff;
-            --bg-gradient-2: #fbcfe8;
-            --text-color: #1e293b;
-            --warning-bg: #fee2e2;
-            --warning-border: #ef4444;
+            --bg-dark: #0a0a0a;
+            --surface: #141414;
+            --surface-border: rgba(255, 255, 255, 0.08);
+            --accent: #504FED;
+            --accent-hover: #6b6afa;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+            --danger: #ef4444;
+            --danger-bg: rgba(239, 68, 68, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
-            background-attachment: fixed;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
+            font-family: 'Manrope', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
             overflow-x: hidden;
+            cursor: default;
         }
 
-        /* --- NAVIGATION / TAB BAR --- */
-        .nav-header {
-            background-color: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 0;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        /* --- CUSTOM CURSOR GLOW --- */
+        .cursor-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(80, 79, 237, 0.15) 0%, transparent 60%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: opacity 0.3s ease;
+            mix-blend-mode: screen;
+        }
+
+        /* --- NAVIGATION --- */
+        .nav-wrapper {
             position: sticky;
             top: 0;
             z-index: 100;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--surface-border);
+            padding: 1rem 2rem;
         }
 
-        .nav-title {
-            color: #fff;
-            text-align: center;
-            padding: 15px;
-            margin: 0;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, #60a5fa, #a78bfa, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .nav-tabs {
+        .nav-scroll {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            padding: 10px;
+            gap: 1rem;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
         }
 
-        .nav-link {
-            color: #cbd5e1;
-            text-decoration: none;
-            padding: 8px 16px;
-            margin: 4px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 2px solid transparent;
-            background: rgba(255, 255, 255, 0.05);
+        .nav-scroll::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
         }
 
-        .nav-link:hover {
-            color: white;
-            background-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
+        .lang-btn {
+            background: transparent;
+            border: 1px solid var(--surface-border);
+            color: var(--text-muted);
+            padding: 0.6rem 1.2rem;
+            border-radius: 100px;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+            text-transform: lowercase;
         }
 
-        .nav-link.active {
-            color: white;
-            background-color: var(--primary);
-            border-color: #818cf8;
-            box-shadow: 0 0 15px rgba(79, 70, 229, 0.6);
-            transform: scale(1.05);
+        .lang-btn:hover {
+            color: var(--text-main);
+            border-color: var(--text-muted);
         }
 
-        /* --- PAGE TRANSITION LOADER --- */
-        #loader {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255, 255, 255, 0.98);
-            z-index: 9999;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+        .lang-btn.active {
+            background: var(--text-main);
+            color: var(--bg-dark);
+            border-color: var(--text-main);
         }
 
-        .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid #e0e7ff;
-            border-top: 6px solid var(--secondary);
-            border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.68, -0.55, 0.26, 1.55) infinite;
-        }
-
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* --- MAIN PAGE CONTENT --- */
-        #page-content {
+        /* --- CONTENT WRAPPER (For Transitions) --- */
+        #content-wrapper {
             opacity: 1;
             transition: opacity 0.4s ease;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
         }
 
-        .header-container {
-            text-align: center;
-            padding: 50px 20px 20px;
+        /* --- HERO SECTION --- */
+        .hero {
+            margin-bottom: 4rem;
         }
 
-        .header-top h1 {
-            font-size: 3rem;
-            margin: 0;
-            color: #1e1b4b;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        .hero-title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            text-transform: lowercase;
         }
 
-        .header-top p {
-            font-size: 1.3rem;
-            color: #475569;
-            margin-top: 10px;
-            font-weight: 700;
+        .title-accent { color: var(--accent); }
+        .hero-title b { color: var(--accent); font-weight: 800; }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
         }
 
-        .warning-box {
-            background: linear-gradient(135deg, #fff1f2, #ffe4e6);
-            border: 3px dashed var(--warning-border);
-            color: #be123c;
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 25px;
-            border-radius: 20px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            animation: bounceWarning 2s infinite;
-            box-shadow: 0 10px 25px rgba(225, 29, 72, 0.2);
+        /* --- WARNING / STATEMENT SECTION --- */
+        .statement-box {
+            background: var(--danger-bg);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 6rem;
             position: relative;
             overflow: hidden;
-            box-sizing: border-box;
         }
 
-        .warning-box::before {
+        .statement-box::before {
             content: '';
             position: absolute;
-            top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 60%);
-            animation: sweep 4s linear infinite;
-            pointer-events: none;
+            top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--danger);
         }
 
-        @keyframes sweep {
-            0% { transform: translate(-30%, -30%); }
-            100% { transform: translate(30%, 30%); }
+        .statement-title {
+            color: var(--danger);
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        @keyframes bounceWarning {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .statement-text {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
         }
 
-        .warning-box span {
-            font-size: 2.5rem;
-            display: block;
-            margin-bottom: 10px;
-        }
+        .statement-text:last-child { margin-bottom: 0; }
+        .highlight-pdf { font-weight: 800; color: #fff; text-decoration: underline; text-decoration-color: var(--danger); }
 
-        /* --- CREATIVE ALTERNATING TIMELINE --- */
-        .timeline {
+        /* --- INTERACTIVE STACKING CARDS (STEPS) --- */
+        .steps-container {
             position: relative;
-            max-width: 1000px;
-            margin: 60px auto;
-            padding: 20px;
-        }
-
-        /* Center Line */
-        .timeline::before {
-            content: '';
-            position: absolute;
-            top: 0; bottom: 0;
-            left: 50%;
-            width: 6px;
-            background: linear-gradient(to bottom, #818cf8, #c084fc, #f472b6, #34d399);
-            transform: translateX(-50%);
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(129, 140, 248, 0.5);
+            padding-bottom: 4rem;
         }
 
         .step-card {
-            position: relative;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 30px;
-            width: calc(50% - 60px);
-            margin-bottom: 50px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border: 1px solid rgba(255,255,255,0.6);
-            opacity: 0;
-            animation: slideUpFade 0.8s forwards;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-            box-sizing: border-box;
+            position: sticky;
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 24px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
-        /* Alternating sides */
-        .step-card:nth-child(odd) {
-            left: 0;
-            transform-origin: right center;
-        }
-        
-        .step-card:nth-child(even) {
-            left: calc(50% + 60px);
-            transform-origin: left center;
-        }
+        /* Stacking offsets */
+        .step-card:nth-child(1) { top: 100px; z-index: 1; }
+        .step-card:nth-child(2) { top: 120px; z-index: 2; }
+        .step-card:nth-child(3) { top: 140px; z-index: 3; }
+        .step-card:nth-child(4) { top: 160px; z-index: 4; }
 
-        .step-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-            z-index: 10;
-        }
-
-        /* Glow effects for cards based on step */
-        .step-1 { animation-delay: 0.1s; border-top: 5px solid #4f46e5; }
-        .step-2 { animation-delay: 0.3s; border-top: 5px solid #a855f7; }
-        .step-3 { animation-delay: 0.5s; border-top: 5px solid #ec4899; }
-        .step-4 { animation-delay: 0.7s; border-top: 5px solid #10b981; }
-
-        /* The Icons placed exactly on the center line */
-        .step-icon {
-            position: absolute;
-            top: 20px;
-            width: 70px;
-            height: 70px;
-            background: #fff;
-            border-radius: 50%;
+        .step-header {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            z-index: 5;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.26, 1.55);
-            box-sizing: border-box;
+            align-items: flex-start;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--surface-border);
+            padding-bottom: 1.5rem;
         }
 
-        .step-card:nth-child(odd) .step-icon {
-            right: -95px; /* (60px gap + 35px half-width) */
-            border: 4px solid #4f46e5;
-        }
-        
-        .step-card:nth-child(even) .step-icon {
-            left: -95px;
-            border: 4px solid #a855f7;
+        .step-number {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--surface-border);
+            line-height: 1;
+            margin-right: 1.5rem;
         }
 
-        .step-3 .step-icon { border-color: #ec4899 !important; }
-        .step-4 .step-icon { border-color: #10b981 !important; }
-
-        .step-card:hover .step-icon {
-            transform: rotate(360deg) scale(1.2);
-            background: var(--text-color);
+        .step-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            text-transform: lowercase;
         }
 
-        /* Connecting arrow to the line */
-        .step-card::after {
-            content: '';
-            position: absolute;
-            top: 40px;
-            width: 0; height: 0;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
+        .step-title b { color: var(--accent); }
+
+        .step-content ul {
+            list-style: none;
         }
 
-        .step-card:nth-child(odd)::after {
-            right: -15px;
-            border-left: 15px solid rgba(255,255,255,0.85);
-        }
-
-        .step-card:nth-child(even)::after {
-            left: -15px;
-            border-right: 15px solid rgba(255,255,255,0.85);
-        }
-
-        h3 {
-            margin-top: 0;
-            font-size: 1.8rem;
-            color: #1e293b;
-            border-bottom: 2px dashed #cbd5e1;
-            padding-bottom: 10px;
-        }
-
-        ul {
-            list-style-type: none;
-            padding-left: 0;
-            margin-bottom: 0;
-        }
-
-        li {
-            margin-bottom: 15px;
-            padding-left: 35px;
+        .step-content li {
             position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1.5rem;
             font-size: 1.1rem;
-            transition: transform 0.2s ease;
-            word-wrap: break-word;
+            color: var(--text-muted);
         }
 
-        li:hover {
-            transform: translateX(5px);
+        .step-content li strong {
+            color: var(--text-main);
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
         }
 
-        li::before {
-            content: '✨';
+        .step-content li::before {
+            content: '→';
             position: absolute;
             left: 0;
             top: 2px;
-        }
-
-        .highlight {
-            background: #fef08a;
-            padding: 2px 8px;
-            border-radius: 6px;
+            color: var(--accent);
             font-weight: 800;
-            color: #000;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* --- CALL TO ACTION BUTTON (Sponsor Form) --- */
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            background: linear-gradient(135deg, #2563eb, #4f46e5);
-            color: #fff !important;
-            padding: 10px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: bold;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
-            transition: all 0.3s ease;
-            animation: pulseBtn 2s infinite;
-            text-align: center;
+        .sub-list {
+            margin-top: 0.75rem;
+            padding-left: 1rem;
+            border-left: 1px solid var(--surface-border);
         }
 
-        .action-btn::after {
-            content: ' 📥';
-            margin-left: 5px;
+        .sub-list li {
+            padding-left: 1rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
         }
 
-        .action-btn:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.6);
-            background: linear-gradient(135deg, #1d4ed8, #4338ca);
-        }
+        .sub-list li::before { content: '•'; color: var(--text-muted); }
 
-        @keyframes pulseBtn {
-            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
-        }
-
-        @keyframes slideUpFade {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- MOBILE RESPONSIVENESS (MAINTAINING ZIG-ZAG LAYOUT) --- */
-        @media (max-width: 850px) {
-            .header-top h1 { font-size: 2rem; }
-            .header-top p { font-size: 1rem; }
-            
-            .warning-box { font-size: 1rem; padding: 15px; margin: 15px; }
-            .warning-box span { font-size: 2rem; }
-
-            .timeline { margin: 30px auto; padding: 10px; max-width: 100vw; overflow: hidden; }
-            
-            /* Keep the left-and-right structure but shrink margins and paddings */
-            .step-card {
-                width: calc(50% - 25px);
-                padding: 15px;
-                margin-bottom: 30px;
-                border-radius: 15px;
-            }
-            .step-card:nth-child(even) {
-                left: calc(50% + 25px);
-            }
-
-            /* Shrink icons and adjust positions */
-            .step-icon {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
-                top: 15px;
-                border-width: 3px !important;
-            }
-            .step-card:nth-child(odd) .step-icon { right: -45px; }
-            .step-card:nth-child(even) .step-icon { left: -45px; }
-
-            /* Shrink connecting arrows */
-            .step-card::after {
-                top: 25px;
-                border-width: 10px;
-            }
-            .step-card:nth-child(odd)::after {
-                right: -10px;
-                border-left: 10px solid rgba(255,255,255,0.85);
-            }
-            .step-card:nth-child(even)::after {
-                left: -10px;
-                border-right: 10px solid rgba(255,255,255,0.85);
-            }
-
-            /* Adjust text to fit tiny screens */
-            h3 { font-size: 1.1rem; padding-bottom: 5px; }
-            li { font-size: 0.85rem; margin-bottom: 10px; padding-left: 20px; }
-            li::before { top: 0; font-size: 0.85rem; }
-            
-            .action-btn { 
-                padding: 8px 12px; 
-                font-size: 0.8rem; 
-                display: block; 
-                margin: 10px auto 0;
-            }
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .step-card { padding: 2rem; }
+            .step-number { font-size: 2rem; }
+            .step-title { font-size: 1.4rem; }
+            .cursor-glow { display: none; } /* Disable custom cursor on mobile */
         }
     </style>
 </head>
 <body>
 
-    <div id="loader">
-        <div class="spinner"></div>
-        <h3 id="loading-text" style="color: var(--primary); margin-top: 15px; font-size: 1.5rem;">Loading Page...</h3>
-    </div>
+    <div class="cursor-glow" id="cursorGlow"></div>
 
-    <nav class="nav-header">
-        <h2 id="nav-title" class="nav-title">🌐 Select Your Language Region</h2>
-        <div class="nav-tabs" id="nav-tabs">
-            <a href="#" class="nav-link active" onclick="openLanguagePage('en', this); return false;">English (US)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('es', this); return false;">Mexico (Español)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('zh', this); return false;">China (中文)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('th', this); return false;">Thailand (ไทย)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('bn', this); return false;">Bangladesh (বাংলা)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('kk', this); return false;">Kazakhstan (Қазақ)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('tr', this); return false;">Turkey (Türkçe)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('hi', this); return false;">India (हिन्दी)</a>
-            <a href="#" class="nav-link" onclick="openLanguagePage('ko', this); return false;">Korea (한국어)</a>
+    <nav class="nav-wrapper">
+        <div class="nav-scroll">
+            <button class="lang-btn active" onclick="switchLang('en', this)">english</button>
+            <button class="lang-btn" onclick="switchLang('es', this)">méxico (es)</button>
+            <button class="lang-btn" onclick="switchLang('zh', this)">china (zh)</button>
+            <button class="lang-btn" onclick="switchLang('th', this)">thailand (th)</button>
+            <button class="lang-btn" onclick="switchLang('bn', this)">bangladesh (bn)</button>
+            <button class="lang-btn" onclick="switchLang('kk', this)">kazakhstan (kk)</button>
+            <button class="lang-btn" onclick="switchLang('tr', this)">turkey (tr)</button>
+            <button class="lang-btn" onclick="switchLang('hi', this)">india (hi)</button>
+            <button class="lang-btn" onclick="switchLang('ko', this)">korea (ko)</button>
         </div>
     </nav>
 
-    <div id="page-content">
-        <div class="header-container">
-            <div class="header-top">
-                <h1 id="main-title">How to Join DreamIT ESL</h1>
-                <p id="sub-title">Simple step-by-step guide for International Students</p>
-            </div>
+    <main id="content-wrapper">
+        
+        <section class="hero">
+            <h1 class="hero-title" id="t-hero-title"><b>/</b>how to join<br>dreamIT esl.</h1>
+            <p class="hero-subtitle" id="t-hero-sub">The simple, step-by-step guide to moving from your home country to studying in the U.S. as an International Student.</p>
+        </section>
+
+        <section class="statement-box">
+            <div class="statement-title" id="t-warn-title">⚠️ Critical Rule</div>
+            <p class="statement-text" id="t-warn-1">All of your documents MUST be sent in <span class="highlight-pdf">PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.</p>
+            <p class="statement-text" id="t-warn-2">🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.</p>
+        </section>
+
+        <section class="steps-container">
             
-            <div class="warning-box">
-                <span>⚠️ CRITICAL RULE ⚠️</span>
-                <div id="warning-text">
-                    All of your documents <u>MUST</u> be sent in <strong>PDF format!</strong> Do not send pictures, screenshots, or Word documents. They must be PDFs. All papers must also be in English (or translated).
+            <article class="step-card">
+                <div class="step-header">
+                    <span class="step-number">01</span>
+                    <h2 class="step-title" id="t-step1-title"><b>/</b>apply to the school</h2>
                 </div>
-            </div>
-        </div>
+                <div class="step-content">
+                    <ul id="t-step1-content">
+                        <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
+                        <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
+                        <li><strong>Bank Statement:</strong> A PDF copy of a paper from your bank proving you have enough money to live and study.
+                            <ul class="sub-list">
+                                <li>It must be less than 60 days old.</li>
+                                <li>It must show at least $15,000 USD (plus $3,500 for each family member coming with you).</li>
+                            </ul>
+                        </li>
+                        <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee, along with any registration and tuition fees required by the school.</li>
+                    </ul>
+                </div>
+            </article>
 
-        <div class="timeline">
-            <!-- STEP 1 (Left) -->
-            <div class="step-card step-1">
-                <div class="step-icon">📄</div>
-                <h3 id="step1-title">Step 1: Apply to the School</h3>
-                <ul id="step1-content">
-                    <li><strong>Your Passport:</strong> A <span class="highlight">PDF copy</span> valid for at least 6 more months.</li>
-                    <li><strong>School Diploma:</strong> A <span class="highlight">PDF copy</span> of your high school diploma or higher.</li>
-                    <li><strong>Bank Statement:</strong> A <span class="highlight">PDF copy</span> proving you have funds. Must be less than 60 days old and show at least $15,000 USD (+ $3,500 per family member).
-                        <br>
-                        <em>If someone else is paying for your studies (a sponsor), they must download and fill out this:</em>
-                        <br>
-                        <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">Sponsor Form</a>
-                    </li>
-                    <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee and registration fees.</li>
-                </ul>
-            </div>
+            <article class="step-card">
+                <div class="step-header">
+                    <span class="step-number">02</span>
+                    <h2 class="step-title" id="t-step2-title"><b>/</b>get your school papers</h2>
+                </div>
+                <div class="step-content">
+                    <ul id="t-step2-content">
+                        <li><strong>Acceptance Letter:</strong> Your official Acceptance Letter from the school.</li>
+                        <li><strong>Form I-20:</strong> A super important government document you need to enter the U.S.</li>
+                    </ul>
+                </div>
+            </article>
 
-            <!-- STEP 2 (Right) -->
-            <div class="step-card step-2">
-                <div class="step-icon">✉️</div>
-                <h3 id="step2-title">Step 2: Get Your School Papers</h3>
-                <ul id="step2-content">
-                    <li>Your official <strong>Acceptance Letter</strong>.</li>
-                    <li>Your <strong>Form I-20</strong> (a super important government document you need to enter the U.S.).</li>
-                </ul>
-            </div>
+            <article class="step-card">
+                <div class="step-header">
+                    <span class="step-number">03</span>
+                    <h2 class="step-title" id="t-step3-title"><b>/</b>get your student visa</h2>
+                </div>
+                <div class="step-content">
+                    <ul id="t-step3-content">
+                        <li><strong>Pay the SEVIS Fee:</strong> Pay the government "I-901 fee" online and print the receipt.</li>
+                        <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy or Consulate in your country.</li>
+                        <li><strong>Go to Your Interview:</strong> Bring your school papers, pass your interview, and get your F-1 Student Visa stamped inside your passport!</li>
+                    </ul>
+                </div>
+            </article>
 
-            <!-- STEP 3 (Left) -->
-            <div class="step-card step-3">
-                <div class="step-icon">🛂</div>
-                <h3 id="step3-title">Step 3: Get Your U.S. Student Visa</h3>
-                <ul id="step3-content">
-                    <li><strong>Pay the SEVIS Fee:</strong> Pay the "I-901 fee" online and print the receipt.</li>
-                    <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy/Consulate.</li>
-                    <li><strong>Go to Your Interview:</strong> Bring your papers, pass the interview, and get your F-1 Visa stamped!</li>
-                </ul>
-            </div>
+            <article class="step-card">
+                <div class="step-header">
+                    <span class="step-number">04</span>
+                    <h2 class="step-title" id="t-step4-title"><b>/</b>travel and start classes!</h2>
+                </div>
+                <div class="step-content">
+                    <ul id="t-step4-content">
+                        <li><strong>Fly to the U.S.:</strong> Show the border officers your passport, visa, and Form I-20 to enter the country.</li>
+                        <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before the "start date" written on your Form I-20.</li>
+                        <li><strong>Take a Test:</strong> Take a placement test so the teachers know which English class is the perfect fit for you.</li>
+                        <li><strong>Finish Paying & Sign Up:</strong> Pick your classes and complete any remaining tuition payments.</li>
+                        <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>
+                    </ul>
+                </div>
+            </article>
 
-            <!-- STEP 4 (Right) -->
-            <div class="step-card step-4">
-                <div class="step-icon">✈️</div>
-                <h3 id="step4-title">Step 4: Travel and Start Classes!</h3>
-                <ul id="step4-content">
-                    <li><strong>Fly to the U.S.:</strong> Show border officers your passport, visa, and Form I-20.</li>
-                    <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before your start date.</li>
-                    <li><strong>Take a Test:</strong> Take a placement test for the perfect class fit.</li>
-                    <li><strong>Finish Paying:</strong> Pick classes and pay remaining tuition.</li>
-                    <li><strong>Orientation:</strong> Attend the welcome meeting and begin!</li>
-                </ul>
-            </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script>
+        // Custom Cursor Logic
+        const glow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+        });
+
+        // Translation Dictionary
         const translations = {
             en: {
-                navTitle: "🌐 Select Your Language Region",
-                mainTitle: "How to Join DreamIT ESL",
-                subTitle: "Simple step-by-step guide for International Students",
-                warning: "All of your documents <u>MUST</u> be sent in <strong>PDF format!</strong> Do not send pictures, screenshots, or Word documents. They must be PDFs. All papers must also be in English (or translated).",
-                step1Title: "Step 1: Apply to the School",
-                step2Title: "Step 2: Get Your School Papers",
-                step3Title: "Step 3: Get Your U.S. Student Visa",
-                step4Title: "Step 4: Travel and Start Classes!",
-                loading: "Loading Page...",
-                step1Content: `<li><strong>Your Passport:</strong> A <span class="highlight">PDF copy</span> valid for at least 6 more months.</li>
-                               <li><strong>School Diploma:</strong> A <span class="highlight">PDF copy</span> of your high school diploma or higher.</li>
-                               <li><strong>Bank Statement:</strong> A <span class="highlight">PDF copy</span> proving you have funds. Must be less than 60 days old and show at least $15,000 USD (+ $3,500 per family member).
-                                   <br><em>If someone else is paying for your studies (a sponsor), they must download and fill out this:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">Sponsor Form</a>
-                               </li>
-                               <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee and registration fees.</li>`,
-                step2Content: `<li>Your official <strong>Acceptance Letter</strong>.</li>
-                               <li>Your <strong>Form I-20</strong> (a super important government document you need to enter the U.S.).</li>`,
-                step3Content: `<li><strong>Pay the SEVIS Fee:</strong> Pay the "I-901 fee" online and print the receipt.</li>
-                               <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy/Consulate.</li>
-                               <li><strong>Go to Your Interview:</strong> Bring your papers, pass the interview, and get your F-1 Visa stamped!</li>`,
-                step4Content: `<li><strong>Fly to the U.S.:</strong> Show border officers your passport, visa, and Form I-20.</li>
-                               <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before your start date.</li>
-                               <li><strong>Take a Test:</strong> Take a placement test for the perfect class fit.</li>
-                               <li><strong>Finish Paying:</strong> Pick classes and pay remaining tuition.</li>
-                               <li><strong>Orientation:</strong> Attend the welcome meeting and begin!</li>`
+                heroTitle: "<b>/</b>how to join<br>dreamIT esl.",
+                heroSub: "The simple, step-by-step guide to moving from your home country to studying in the U.S. as an International Student.",
+                warnTitle: "⚠️ Critical Rule",
+                warn1: "All of your documents MUST be sent in <span class='highlight-pdf'>PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.",
+                warn2: "🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.",
+                step1Title: "<b>/</b>apply to the school",
+                step2Title: "<b>/</b>get your school papers",
+                step3Title: "<b>/</b>get your student visa",
+                step4Title: "<b>/</b>travel and start classes!",
+                step1Content: `
+                    <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
+                    <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
+                    <li><strong>Bank Statement:</strong> A PDF copy of a paper from your bank proving you have enough money to live and study.
+                        <ul class="sub-list">
+                            <li>It must be less than 60 days old.</li>
+                            <li>It must show at least $15,000 USD (plus $3,500 for each family member coming with you).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee, along with any registration and tuition fees required by the school.</li>`,
+                step2Content: `
+                    <li><strong>Acceptance Letter:</strong> Your official Acceptance Letter from the school.</li>
+                    <li><strong>Form I-20:</strong> A super important government document you need to enter the U.S.</li>`,
+                step3Content: `
+                    <li><strong>Pay the SEVIS Fee:</strong> Pay the government "I-901 fee" online and print the receipt.</li>
+                    <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy or Consulate in your country.</li>
+                    <li><strong>Go to Your Interview:</strong> Bring your school papers, pass your interview, and get your F-1 Student Visa stamped inside your passport!</li>`,
+                step4Content: `
+                    <li><strong>Fly to the U.S.:</strong> Show the border officers your passport, visa, and Form I-20 to enter the country.</li>
+                    <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before the "start date" written on your Form I-20.</li>
+                    <li><strong>Take a Test:</strong> Take a placement test so the teachers know which English class is the perfect fit for you.</li>
+                    <li><strong>Finish Paying & Sign Up:</strong> Pick your classes and complete any remaining tuition payments.</li>
+                    <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>`
             },
-            es: { 
-                navTitle: "🌐 Seleccione su región de idioma",
-                mainTitle: "Cómo unirse a DreamIT ESL",
-                subTitle: "Guía paso a paso para estudiantes internacionales",
-                warning: "¡Todos sus documentos <u>DEBEN</u> enviarse en <strong>formato PDF!</strong> No envíe fotos ni capturas de pantalla. Además, todos los documentos deben estar en inglés (o traducidos).",
-                step1Title: "Paso 1: Aplicar a la Escuela",
-                step2Title: "Paso 2: Obtener sus Documentos",
-                step3Title: "Paso 3: Obtener su Visa de Estudiante",
-                step4Title: "Paso 4: ¡Viajar y Comenzar las Clases!",
-                loading: "Cargando página...",
-                step1Content: `<li><strong>Su Pasaporte:</strong> Una <span class="highlight">copia en PDF</span> válida por al menos 6 meses más.</li>
-                               <li><strong>Diploma Escolar:</strong> Una <span class="highlight">copia en PDF</span> de su diploma de secundaria o superior.</li>
-                               <li><strong>Estado de Cuenta:</strong> Una <span class="highlight">copia en PDF</span> que demuestre sus fondos. Menos de 60 días de antigüedad y con al menos $15,000 USD.
-                                   <br><em>Si alguien más está pagando sus estudios (un patrocinador), debe descargar y completar esto:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">Formulario de Patrocinador</a>
-                               </li>
-                               <li><strong>Cuotas:</strong> Pague la tarifa de solicitud no reembolsable de $100 y las cuotas de registro.</li>`,
-                step2Content: `<li>Su <strong>Carta de Aceptación</strong> oficial.</li>
-                               <li>Su <strong>Formulario I-20</strong> (un documento gubernamental súper importante para ingresar a EE. UU.).</li>`,
-                step3Content: `<li><strong>Pague la Tarifa SEVIS:</strong> Pague la "tarifa I-901" en línea e imprima el recibo.</li>
-                               <li><strong>Programe una Entrevista:</strong> Agende una cita en la Embajada/Consulado de EE. UU. más cercano.</li>
-                               <li><strong>Vaya a su Entrevista:</strong> ¡Lleve sus documentos, apruebe la entrevista y obtenga su Visa F-1!</li>`,
-                step4Content: `<li><strong>Vuele a EE. UU.:</strong> Muestre a los agentes fronterizos su pasaporte, visa y Formulario I-20.</li>
-                               <li><strong>Vaya a la Escuela:</strong> Preséntese en persona en DreamIT ESL antes de su fecha de inicio.</li>
-                               <li><strong>Tome un Examen:</strong> Tome el examen de ubicación para encontrar su clase perfecta.</li>
-                               <li><strong>Termine de Pagar:</strong> Elija clases y pague la matrícula restante.</li>
-                               <li><strong>Orientación:</strong> ¡Asista a la reunión de bienvenida y comience!</li>`
+            es: {
+                heroTitle: "<b>/</b>cómo unirse a<br>dreamIT esl.",
+                heroSub: "La guía sencilla paso a paso para mudarse de su país de origen a estudiar en EE. UU. como estudiante internacional.",
+                warnTitle: "⚠️ Regla Crítica",
+                warn1: "¡Todos sus documentos DEBEN enviarse en <span class='highlight-pdf'>formato PDF!</span> No envíe fotos ni capturas de pantalla. Deben ser PDFs.",
+                warn2: "🗣️ Además, todos sus documentos deben estar en inglés (o traducidos). Recuerde leer el catálogo de la escuela y las reglas de reembolso antes de comenzar.",
+                step1Title: "<b>/</b>aplicar a la escuela",
+                step2Title: "<b>/</b>obtener sus documentos",
+                step3Title: "<b>/</b>obtener su visa",
+                step4Title: "<b>/</b>viajar y comenzar!",
+                step1Content: `
+                    <li><strong>Su Pasaporte:</strong> Una copia en PDF válida por al menos 6 meses más.</li>
+                    <li><strong>Diploma Escolar:</strong> Una copia en PDF de su diploma de secundaria o superior.</li>
+                    <li><strong>Estado de Cuenta:</strong> Una copia en PDF que demuestre que tiene suficiente dinero.
+                        <ul class="sub-list">
+                            <li>Debe tener menos de 60 días.</li>
+                            <li>Debe mostrar al menos $15,000 USD (más $3,500 por cada familiar que lo acompañe).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Cuotas y Matrícula:</strong> Pague la tarifa de solicitud no reembolsable de $100 y las tarifas de inscripción.</li>`,
+                step2Content: `
+                    <li><strong>Carta de Aceptación:</strong> Su carta oficial de aceptación de la escuela.</li>
+                    <li><strong>Formulario I-20:</strong> Un documento gubernamental súper importante que necesita para ingresar a EE. UU.</li>`,
+                step3Content: `
+                    <li><strong>Pagar la Tarifa SEVIS:</strong> Pague la "tarifa I-901" en línea e imprima el recibo.</li>
+                    <li><strong>Programar Entrevista:</strong> Agende una reunión en la Embajada o Consulado de EE. UU. más cercano.</li>
+                    <li><strong>Ir a su Entrevista:</strong> ¡Lleve sus documentos, apruebe su entrevista y obtenga su visa F-1!</li>`,
+                step4Content: `
+                    <li><strong>Volar a EE. UU.:</strong> Muestre a los oficiales fronterizos su pasaporte, visa y Formulario I-20.</li>
+                    <li><strong>Ir a la Escuela:</strong> Preséntese en DreamIT ESL en persona antes de la "fecha de inicio".</li>
+                    <li><strong>Tomar un Examen:</strong> Tome un examen de ubicación para encontrar su clase perfecta.</li>
+                    <li><strong>Terminar de Pagar:</strong> Elija sus clases y complete los pagos restantes.</li>
+                    <li><strong>Ir a Orientación:</strong> ¡Asista a la reunión de bienvenida y comience su primer día!</li>`
             },
-            zh: { 
-                navTitle: "🌐 选择您的语言区域",
-                mainTitle: "如何加入 DreamIT ESL",
-                subTitle: "留学生简单分步指南",
-                warning: "您所有的文件 <u>必须</u> 以 <strong>PDF 格式</strong> 发送！不要发送图片或截图。所有文件也必须是英文（或提供翻译件）。",
-                step1Title: "第一步：申请学校",
-                step2Title: "第二步：获取录取文件",
-                step3Title: "第三步：获取美国学生签证",
-                step4Title: "第四步：前往美国并开始上课！",
-                loading: "加载页面...",
-                step1Content: `<li><strong>您的护照：</strong>至少还有 6 个月有效期的<span class="highlight">PDF副本</span>。</li>
-                               <li><strong>毕业证书：</strong>高中或以上学历证书的<span class="highlight">PDF副本</span>。</li>
-                               <li><strong>银行存款证明：</strong>证明您有资金的<span class="highlight">PDF副本</span>。必须是最近60天内开具的，且至少有$15,000美元。
-                                   <br><em>如果其他人（资助人）为您支付学费，他们必须下载并填写此表格：</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">资助人表格</a>
-                               </li>
-                               <li><strong>费用和学费：</strong>支付不可退还的 $100 申请费和注册费。</li>`,
-                step2Content: `<li>您的正式 <strong>录取通知书</strong>。</li>
-                               <li>您的 <strong>I-20 表格</strong>（进入美国所需的一份非常重要的政府文件）。</li>`,
-                step3Content: `<li><strong>支付 SEVIS 费用：</strong>在线支付“I-901 费用”并打印收据。</li>
-                               <li><strong>预约面签：</strong>在最近的美国大使馆/领事馆预约面谈。</li>
-                               <li><strong>去面签：</strong>带上您的文件，通过面试，并获得 F-1 签证印章！</li>`,
-                step4Content: `<li><strong>飞往美国：</strong>向边防人员出示您的护照、签证和 I-20 表格。</li>
-                               <li><strong>去学校：</strong>在您的开学日期之前亲自前往 DreamIT ESL 报到。</li>
-                               <li><strong>参加入学考试：</strong>参加分级考试，以便安排最适合您的课程。</li>
-                               <li><strong>完成付款：</strong>选择课程并支付剩余学费。</li>
-                               <li><strong>迎新会：</strong>参加迎新会议并开始上课！</li>`
+            zh: {
+                heroTitle: "<b>/</b>如何加入<br>dreamIT esl.",
+                heroSub: "留学生从祖国搬到美国学习的简单分步指南。",
+                warnTitle: "⚠️ 关键规则",
+                warn1: "您所有的文件必须以 <span class='highlight-pdf'>PDF 格式</span> 发送！不要发送图片或手机截图。它们必须是PDF。",
+                warn2: "🗣️ 此外，您所有的文件必须是英文（或翻译成英文）。开始前请记得阅读学校的目录和退款规则。",
+                step1Title: "<b>/</b>申请学校",
+                step2Title: "<b>/</b>获取学校文件",
+                step3Title: "<b>/</b>获取学生签证",
+                step4Title: "<b>/</b>旅行并开始上课！",
+                step1Content: `
+                    <li><strong>您的护照：</strong>护照的 PDF 副本。必须至少还有 6 个月的有效期。</li>
+                    <li><strong>毕业证书：</strong>高中或以上学历证书的 PDF 副本。</li>
+                    <li><strong>银行流水：</strong>证明您有足够资金的银行文件 PDF 副本。
+                        <ul class="sub-list">
+                            <li>必须是 60 天内开具的。</li>
+                            <li>必须显示至少 15,000 美元（每位随行家属增加 3,500 美元）。</li>
+                        </ul>
+                    </li>
+                    <li><strong>费用和学费：</strong>支付 100 美元不可退还的申请费及相关注册费。</li>`,
+                step2Content: `
+                    <li><strong>录取通知书：</strong>学校官方的录取通知书。</li>
+                    <li><strong>I-20 表格：</strong>您进入美国所需的一份非常重要的政府文件。</li>`,
+                step3Content: `
+                    <li><strong>支付 SEVIS 费用：</strong>在线支付“I-901 费用”并打印收据。</li>
+                    <li><strong>预约面谈：</strong>在最近的美国大使馆或领事馆预约面谈。</li>
+                    <li><strong>参加面谈：</strong>带上您的文件，通过面谈，并获得 F-1 学生签证！</li>`,
+                step4Content: `
+                    <li><strong>飞往美国：</strong>向边防人员出示您的护照、签证和 I-20 表格。</li>
+                    <li><strong>去学校：</strong>在 I-20 上的“开学日期”前亲自前往 DreamIT ESL 报到。</li>
+                    <li><strong>参加测试：</strong>参加分级测试，以便老师了解最适合您的班级。</li>
+                    <li><strong>完成付款和注册：</strong>选择课程并完成剩余学费的支付。</li>
+                    <li><strong>参加迎新：</strong>参加迎新会，领取学生手册，开始第一天的学校生活！</li>`
             },
-            th: { 
-                navTitle: "🌐 เลือกภูมิภาคภาษาของคุณ",
-                mainTitle: "วิธีเข้าร่วม DreamIT ESL",
-                subTitle: "คำแนะนำทีละขั้นตอนง่ายๆ สำหรับนักเรียนต่างชาติ",
-                warning: "เอกสารทั้งหมดของคุณ <u>ต้อง</u> ส่งใน <strong>รูปแบบ PDF!</strong> ห้ามส่งรูปภาพ ภาพหน้าจอ หรือเอกสาร Word ต้องเป็น PDF เท่านั้น เอกสารทั้งหมดต้องเป็นภาษาอังกฤษ (หรือแปลแล้ว)",
-                step1Title: "ขั้นตอนที่ 1: สมัครเข้าเรียน",
-                step2Title: "ขั้นตอนที่ 2: รับเอกสารจากโรงเรียน",
-                step3Title: "ขั้นตอนที่ 3: รับวีซ่านักเรียนสหรัฐฯ",
-                step4Title: "ขั้นตอนที่ 4: เดินทางและเริ่มเรียน!",
-                loading: "กำลังโหลดหน้า...",
-                step1Content: `<li><strong>หนังสือเดินทาง:</strong> <span class="highlight">สำเนา PDF</span> ที่มีอายุเหลืออย่างน้อย 6 เดือน</li>
-                               <li><strong>วุฒิการศึกษา:</strong> <span class="highlight">สำเนา PDF</span> ของประกาศนียบัตรมัธยมปลายหรือสูงกว่า</li>
-                               <li><strong>รายการเดินบัญชี:</strong> <span class="highlight">สำเนา PDF</span> เพื่อพิสูจน์ฐานะการเงิน ต้องไม่เกิน 60 วัน และมียอดอย่างน้อย $15,000 USD
-                                   <br><em>หากมีผู้อื่นจ่ายค่าเล่าเรียนให้คุณ (ผู้สนับสนุน) พวกเขาจะต้องดาวน์โหลดและกรอกแบบฟอร์มนี้:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">แบบฟอร์มผู้สนับสนุน</a>
-                               </li>
-                               <li><strong>ค่าธรรมเนียม:</strong> ชำระค่าสมัคร $100 (ไม่คืนเงิน) และค่าลงทะเบียน</li>`,
-                step2Content: `<li><strong>จดหมายตอบรับ</strong> อย่างเป็นทางการของคุณ</li>
-                               <li><strong>แบบฟอร์ม I-20</strong> ของคุณ (เอกสารสำคัญมากจากรัฐบาลเพื่อเข้าสหรัฐฯ)</li>`,
-                step3Content: `<li><strong>ชำระค่า SEVIS:</strong> ชำระค่าธรรมเนียม "I-901" ออนไลน์และพิมพ์ใบเสร็จ</li>
-                               <li><strong>นัดหมายสัมภาษณ์:</strong> จองคิวที่สถานทูต/กงสุลสหรัฐฯ ที่ใกล้ที่สุด</li>
-                               <li><strong>ไปสัมภาษณ์:</strong> นำเอกสารไป ผ่านการสัมภาษณ์ และรับวีซ่า F-1!</li>`,
-                step4Content: `<li><strong>บินไปสหรัฐฯ:</strong> แสดงหนังสือเดินทาง วีซ่า และ I-20 แก่เจ้าหน้าที่ตรวจคนเข้าเมือง</li>
-                               <li><strong>ไปโรงเรียน:</strong> รายงานตัวที่ DreamIT ESL ด้วยตนเองก่อนวันเริ่มเรียน</li>
-                               <li><strong>สอบวัดระดับ:</strong> ทำแบบทดสอบเพื่อหาชั้นเรียนที่เหมาะสมที่สุด</li>
-                               <li><strong>ชำระเงินให้เสร็จสิ้น:</strong> เลือกวิชาเรียนและชำระค่าเทอมที่เหลือ</li>
-                               <li><strong>ปฐมนิเทศ:</strong> เข้าร่วมงานต้อนรับและเริ่มเรียนได้เลย!</li>`
+            th: {
+                heroTitle: "<b>/</b>วิธีเข้าร่วม<br>dreamIT esl.",
+                heroSub: "คำแนะนำทีละขั้นตอนง่ายๆ สำหรับการย้ายจากประเทศบ้านเกิดมาเรียนที่สหรัฐอเมริกา",
+                warnTitle: "⚠️ กฎสำคัญ",
+                warn1: "เอกสารทั้งหมดต้องส่งเป็น <span class='highlight-pdf'>ไฟล์ PDF เท่านั้น!</span> ห้ามส่งรูปถ่ายหรือภาพหน้าจอ",
+                warn2: "🗣️ เอกสารทั้งหมดต้องเป็นภาษาอังกฤษ (หรือแปลแล้ว) โปรดอ่านแคตตาล็อกและกฎการคืนเงินก่อนเริ่ม",
+                step1Title: "<b>/</b>สมัครเข้าเรียน",
+                step2Title: "<b>/</b>รับเอกสาร",
+                step3Title: "<b>/</b>ขอวีซ่านักเรียน",
+                step4Title: "<b>/</b>เดินทางและเริ่มเรียน!",
+                step1Content: `
+                    <li><strong>หนังสือเดินทาง:</strong> สำเนา PDF ที่มีอายุเหลืออย่างน้อย 6 เดือน</li>
+                    <li><strong>วุฒิการศึกษา:</strong> สำเนา PDF ของประกาศนียบัตรมัธยมปลายหรือสูงกว่า</li>
+                    <li><strong>รายการเดินบัญชี:</strong> สำเนา PDF จากธนาคาร
+                        <ul class="sub-list">
+                            <li>ต้องไม่เกิน 60 วัน</li>
+                            <li>ต้องมีเงินอย่างน้อย $15,000 USD (และ $3,500 ต่อสมาชิกครอบครัว)</li>
+                        </ul>
+                    </li>
+                    <li><strong>ค่าธรรมเนียม:</strong> ชำระค่าสมัคร $100 (ไม่คืนเงิน) และค่าลงทะเบียน</li>`,
+                step2Content: `
+                    <li><strong>จดหมายตอบรับ:</strong> จดหมายตอบรับอย่างเป็นทางการ</li>
+                    <li><strong>แบบฟอร์ม I-20:</strong> เอกสารสำคัญจากรัฐบาลเพื่อเข้าสหรัฐอเมริกา</li>`,
+                step3Content: `
+                    <li><strong>จ่ายค่า SEVIS:</strong> จ่ายค่า "I-901" ออนไลน์และพิมพ์ใบเสร็จ</li>
+                    <li><strong>นัดสัมภาษณ์:</strong> จองคิวที่สถานทูตสหรัฐฯ ที่ใกล้ที่สุด</li>
+                    <li><strong>ไปสัมภาษณ์:</strong> นำเอกสารไป ผ่านการสัมภาษณ์ และรับวีซ่า F-1!</li>`,
+                step4Content: `
+                    <li><strong>บินไปสหรัฐฯ:</strong> แสดงหนังสือเดินทาง วีซ่า และ I-20 ต่อเจ้าหน้าที่</li>
+                    <li><strong>ไปโรงเรียน:</strong> ไปที่ DreamIT ESL ก่อนวันที่ระบุใน I-20</li>
+                    <li><strong>สอบวัดระดับ:</strong> เพื่อให้ได้ชั้นเรียนที่เหมาะสมที่สุด</li>
+                    <li><strong>จ่ายเงินให้เสร็จ:</strong> เลือกวิชาและจ่ายค่าเทอมที่เหลือ</li>
+                    <li><strong>ปฐมนิเทศ:</strong> เข้าร่วมงานต้อนรับและเริ่มเรียนวันแรก!</li>`
             },
-            bn: { 
-                navTitle: "🌐 আপনার ভাষা অঞ্চল নির্বাচন করুন",
-                mainTitle: "কিভাবে DreamIT ESL-এ যোগ দেবেন",
-                subTitle: "আন্তর্জাতিক ছাত্রদের জন্য সহজ ধাপে ধাপে নির্দেশিকা",
-                warning: "আপনার সমস্ত নথি <u>অবশ্যই</u> <strong>PDF ফর্ম্যাটে</strong> পাঠাতে হবে! ছবি, স্ক্রিনশট বা ওয়ার্ড ডকুমেন্ট পাঠাবেন না। সেগুলি অবশ্যই PDF হতে হবে। সমস্ত কাগজপত্র ইংরেজিতেও হতে হবে (বা অনুবাদ করা)।",
-                step1Title: "ধাপ 1: স্কুলে আবেদন করুন",
-                step2Title: "ধাপ 2: আপনার স্কুলের কাগজপত্র পান",
-                step3Title: "ধাপ 3: আপনার মার্কিন ছাত্র ভিসা পান",
-                step4Title: "ধাপ 4: ভ্রমণ করুন এবং ক্লাস শুরু করুন!",
-                loading: "পেজ লোড হচ্ছে...",
-                step1Content: `<li><strong>আপনার পাসপোর্ট:</strong> অন্তত ৬ মাসের জন্য বৈধ একটি <span class="highlight">PDF কপি</span>।</li>
-                               <li><strong>স্কুল ডিপ্লোমা:</strong> আপনার হাই স্কুল ডিপ্লোমা বা উচ্চতর ডিগ্রির <span class="highlight">PDF কপি</span>।</li>
-                               <li><strong>ব্যাঙ্ক স্টেটমেন্ট:</strong> তহবিলের প্রমাণস্বরূপ <span class="highlight">PDF কপি</span>। ৬০ দিনের বেশি পুরানো হওয়া যাবে না এবং অন্তত $15,000 USD দেখাতে হবে।
-                                   <br><em>যদি অন্য কেউ আপনার পড়াশোনার খরচ বহন করে (একজন স্পনসর), তবে তাদের এটি ডাউনলোড করে পূরণ করতে হবে:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">স্পনসর ফর্ম</a>
-                               </li>
-                               <li><strong>ফি ও টিউশন:</strong> অফেরতযোগ্য $100 আবেদন ফি এবং রেজিস্ট্রেশন ফি প্রদান করুন।</li>`,
-                step2Content: `<li>আপনার অফিসিয়াল <strong>অ্যাকসেপ্টেন্স লেটার (গ্রহণপত্র)</strong>।</li>
-                               <li>আপনার <strong>ফর্ম I-20</strong> (মার্কিন যুক্তরাষ্ট্রে প্রবেশের জন্য একটি অত্যন্ত গুরুত্বপূর্ণ সরকারি নথি)।</li>`,
-                step3Content: `<li><strong>SEVIS ফি দিন:</strong> অনলাইনে "I-901 ফি" প্রদান করুন এবং রসিদ প্রিন্ট করুন।</li>
-                               <li><strong>ইন্টারভিউ বুক করুন:</strong> নিকটস্থ মার্কিন দূতাবাস/কনস্যুলেটে একটি মিটিং নির্ধারণ করুন।</li>
-                               <li><strong>ইন্টারভিউতে যান:</strong> আপনার কাগজপত্র নিয়ে যান, ইন্টারভিউ পাস করুন এবং আপনার F-1 ভিসা স্ট্যাম্প করান!</li>`,
-                step4Content: `<li><strong>মার্কিন যুক্তরাষ্ট্রে ফ্লাই করুন:</strong> বর্ডার অফিসারদের আপনার পাসপোর্ট, ভিসা এবং ফর্ম I-20 দেখান।</li>
-                               <li><strong>স্কুলে যান:</strong> আপনার শুরুর তারিখের আগে ব্যক্তিগতভাবে DreamIT ESL-এ উপস্থিত হোন।</li>
-                               <li><strong>পরীক্ষা দিন:</strong> সঠিক ক্লাস বেছে নেওয়ার জন্য একটি প্লেসমেন্ট টেস্ট দিন।</li>
-                               <li><strong>পেমেন্ট শেষ করুন:</strong> ক্লাস বেছে নিন এবং বাকি টিউশন ফি পরিশোধ করুন।</li>
-                               <li><strong>ওরিয়েন্টেশন:</strong> স্বাগত সভায় যোগ দিন এবং শুরু করুন!</li>`
+            bn: {
+                heroTitle: "<b>/</b>কিভাবে যোগ দেবেন<br>dreamIT esl.",
+                heroSub: "আন্তর্জাতিক ছাত্র হিসেবে মার্কিন যুক্তরাষ্ট্রে পড়তে আসার সহজ নির্দেশিকা।",
+                warnTitle: "⚠️ গুরুত্বপূর্ণ নিয়ম",
+                warn1: "সমস্ত নথি <span class='highlight-pdf'>PDF ফর্ম্যাটে</span> পাঠাতে হবে! কোনো ছবি বা স্ক্রিনশট নয়।",
+                warn2: "🗣️ সমস্ত কাগজপত্র ইংরেজিতে হতে হবে। শুরু করার আগে স্কুলের ক্যাটালগ এবং রিফান্ড রুলস পড়ুন।",
+                step1Title: "<b>/</b>স্কুলে আবেদন করুন",
+                step2Title: "<b>/</b>কাগজপত্র পান",
+                step3Title: "<b>/</b>ভিসা পান",
+                step4Title: "<b>/</b>ভ্রমণ এবং ক্লাস শুরু!",
+                step1Content: `
+                    <li><strong>পাসপোর্ট:</strong> অন্তত ৬ মাস মেয়াদ আছে এমন পাসপোর্টের PDF।</li>
+                    <li><strong>ডিপ্লোমা:</strong> হাই স্কুল বা উচ্চতর ডিগ্রির PDF।</li>
+                    <li><strong>ব্যাঙ্ক স্টেটমেন্ট:</strong> পর্যাপ্ত টাকার প্রমাণস্বরূপ PDF।
+                        <ul class="sub-list">
+                            <li>৬০ দিনের বেশি পুরানো হওয়া যাবে না।</li>
+                            <li>অন্তত $15,000 USD দেখাতে হবে (পরিবারের প্রতি সদস্যের জন্য $3,500)।</li>
+                        </ul>
+                    </li>
+                    <li><strong>ফি:</strong> অফেরতযোগ্য $100 আবেদন ফি প্রদান করুন।</li>`,
+                step2Content: `
+                    <li><strong>গ্রহণপত্র:</strong> স্কুলের অফিসিয়াল অ্যাকসেপ্টেন্স লেটার।</li>
+                    <li><strong>ফর্ম I-20:</strong> মার্কিন যুক্তরাষ্ট্রে প্রবেশের জন্য গুরুত্বপূর্ণ সরকারি নথি।</li>`,
+                step3Content: `
+                    <li><strong>SEVIS ফি:</strong> অনলাইনে "I-901 ফি" প্রদান করুন।</li>
+                    <li><strong>ইন্টারভিউ বুক করুন:</strong> নিকটস্থ মার্কিন দূতাবাসে সময় নির্ধারণ করুন।</li>
+                    <li><strong>ইন্টারভিউতে যান:</strong> ইন্টারভিউ পাস করুন এবং F-1 ভিসা পান!</li>`,
+                step4Content: `
+                    <li><strong>ফ্লাই করুন:</strong> বর্ডার অফিসারদের পাসপোর্ট, ভিসা এবং ফর্ম I-20 দেখান।</li>
+                    <li><strong>স্কুলে যান:</strong> "start date" এর আগে স্কুলে উপস্থিত হোন।</li>
+                    <li><strong>পরীক্ষা দিন:</strong> সঠিক ক্লাসের জন্য প্লেসমেন্ট টেস্ট দিন।</li>
+                    <li><strong>পেমেন্ট শেষ করুন:</strong> ক্লাস বেছে নিন এবং টিউশন ফি পরিশোধ করুন।</li>
+                    <li><strong>ওরিয়েন্টেশন:</strong> স্বাগত সভায় যোগ দিন এবং শুরু করুন!</li>`
             },
-            kk: { 
-                navTitle: "🌐 Тіл аймағын таңдаңыз",
-                mainTitle: "DreamIT ESL-ге қалай қосылуға болады",
-                subTitle: "Халықаралық студенттерге арналған қарапайым қадамдық нұсқаулық",
-                warning: "Барлық құжаттарыңыз <u>МІНДЕТТІ ТҮРДЕ</u> <strong>PDF форматында</strong> жіберілуі керек! Суреттерді немесе Word құжаттарын жібермеңіз. Барлық құжаттар ағылшын тілінде (немесе аударылған) болуы керек.",
-                step1Title: "1-қадам: Мектепке өтініш беру",
-                step2Title: "2-қадам: Мектеп құжаттарын алу",
-                step3Title: "3-қадам: АҚШ студенттік визасын алу",
-                step4Title: "4-қадам: Саяхат және сабақты бастау!",
-                loading: "Бет жүктелуде...",
-                step1Content: `<li><strong>Төлқұжат:</strong> Кемінде 6 ай жарамды <span class="highlight">PDF көшірмесі</span>.</li>
-                               <li><strong>Диплом:</strong> Орта мектеп немесе одан жоғары білім туралы <span class="highlight">PDF көшірме</span>.</li>
-                               <li><strong>Банк үзіндісі:</strong> Қаражатыңызды растайтын <span class="highlight">PDF көшірме</span>. 60 күннен аспауы және кемінде $15,000 USD көрсетуі керек.
-                                   <br><em>Егер сіздің оқуыңызды басқа біреу (демеуші) төлесе, олар мынаны жүктеп алып, толтыруы керек:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">Демеуші формасы</a>
-                               </li>
-                               <li><strong>Төлемдер:</strong> Қайтарылмайтын $100 өтініш ақысын және тіркеу ақысын төлеңіз.</li>`,
-                step2Content: `<li>Ресми <strong>Қабылдау хаты</strong>.</li>
-                               <li><strong>I-20 формасы</strong> (АҚШ-қа кіру үшін қажетті өте маңызды құжат).</li>`,
-                step3Content: `<li><strong>SEVIS төлемі:</strong> "I-901" ақысын онлайн төлеп, түбіртекті басып шығарыңыз.</li>
-                               <li><strong>Сұхбатқа жазылу:</strong> Ең жақын АҚШ Елшілігіне/Консулдығына жазылыңыз.</li>
-                               <li><strong>Сұхбатқа бару:</strong> Құжаттарды апарып, сұхбаттан өтіп, F-1 визасын алыңыз!</li>`,
-                step4Content: `<li><strong>АҚШ-қа ұшу:</strong> Шекара қызметкерлеріне төлқұжат, виза және I-20 формасын көрсетіңіз.</li>
-                               <li><strong>Мектепке бару:</strong> Оқу басталғанға дейін DreamIT ESL-ге жеке өзіңіз барыңыз.</li>
-                               <li><strong>Тест тапсыру:</strong> Деңгейді анықтау тестін тапсырыңыз.</li>
-                               <li><strong>Төлемді аяқтау:</strong> Сабақтарды таңдап, қалған оқу ақысын төлеңіз.</li>
-                               <li><strong>Бағдарлау:</strong> Қарсы алу жиналысына қатысып, оқуды бастаңыз!</li>`
+            kk: {
+                heroTitle: "<b>/</b>қалай қосылуға болады<br>dreamIT esl.",
+                heroSub: "АҚШ-қа халықаралық студент ретінде оқуға барудың қарапайым қадамдық нұсқаулығы.",
+                warnTitle: "⚠️ Маңызды ереже",
+                warn1: "Барлық құжаттар <span class='highlight-pdf'>PDF форматында</span> болуы тиіс! Суреттерді жібермеңіз.",
+                warn2: "🗣️ Барлық құжаттар ағылшын тілінде болуы керек. Мектеп ережелерімен танысыңыз.",
+                step1Title: "<b>/</b>мектепке өтініш беру",
+                step2Title: "<b>/</b>құжаттарды алу",
+                step3Title: "<b>/</b>виза алу",
+                step4Title: "<b>/</b>оқуды бастау!",
+                step1Content: `
+                    <li><strong>Төлқұжат:</strong> Кемінде 6 ай жарамды PDF көшірме.</li>
+                    <li><strong>Диплом:</strong> Орта немесе жоғары білім туралы PDF көшірме.</li>
+                    <li><strong>Банк үзіндісі:</strong> Қаражатты растайтын PDF құжат.
+                        <ul class="sub-list">
+                            <li>60 күннен аспауы керек.</li>
+                            <li>Кемінде $15,000 USD болуы тиіс (әр отбасы мүшесіне +$3,500).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Төлемдер:</strong> Қайтарылмайтын $100 өтініш ақысын төлеңіз.</li>`,
+                step2Content: `
+                    <li><strong>Қабылдау хаты:</strong> Ресми қабылдау хаты.</li>
+                    <li><strong>I-20 формасы:</strong> АҚШ-қа кіру үшін маңызды құжат.</li>`,
+                step3Content: `
+                    <li><strong>SEVIS төлемі:</strong> "I-901" ақысын онлайн төлеңіз.</li>
+                    <li><strong>Сұхбатқа жазылу:</strong> Ең жақын АҚШ Елшілігіне жазылыңыз.</li>
+                    <li><strong>Сұхбатқа бару:</strong> Сұхбаттан өтіп, F-1 визасын алыңыз!</li>`,
+                step4Content: `
+                    <li><strong>АҚШ-қа ұшу:</strong> Шекарада төлқұжат, виза және I-20 көрсетіңіз.</li>
+                    <li><strong>Мектепке бару:</strong> Басталу күніне дейін мектепке барыңыз.</li>
+                    <li><strong>Тест тапсыру:</strong> Деңгейді анықтау тестін тапсырыңыз.</li>
+                    <li><strong>Төлемді аяқтау:</strong> Қалған оқу ақысын төлеңіз.</li>
+                    <li><strong>Бағдарлау:</strong> Қарсы алу жиналысына қатысып, оқуды бастаңыз!</li>`
             },
-            tr: { 
-                navTitle: "🌐 Dil Bölgenizi Seçin",
-                mainTitle: "DreamIT ESL'ye Nasıl Katılabilirsiniz",
-                subTitle: "Uluslararası Öğrenciler için adım adım basit rehber",
-                warning: "Tüm belgeleriniz <u>KESİNLİKLE</u> <strong>PDF formatında</strong> gönderilmelidir! Resim, ekran görüntüsü veya Word belgesi göndermeyin. Tüm evraklar İngilizce (veya çevrilmiş) olmalıdır.",
-                step1Title: "1. Adım: Okula Başvurun",
-                step2Title: "2. Adım: Okul Belgelerinizi Alın",
-                step3Title: "3. Adım: ABD Öğrenci Vizenizi Alın",
-                step4Title: "4. Adım: Seyahat Edin ve Derslere Başlayın!",
-                loading: "Sayfa yükleniyor...",
-                step1Content: `<li><strong>Pasaportunuz:</strong> En az 6 ay daha geçerli <span class="highlight">PDF kopyası</span>.</li>
-                               <li><strong>Diploma:</strong> Lise veya dengi diplomanızın <span class="highlight">PDF kopyası</span>.</li>
-                               <li><strong>Banka Hesap Özeti:</strong> Fonunuz olduğunu kanıtlayan <span class="highlight">PDF kopyası</span>. En fazla 60 günlük olmalı ve en az 15.000 USD göstermelidir.
-                                   <br><em>Eğitiminizi başka birisi (sponsor) karşılıyorsa, bu formu indirip doldurmaları gerekir:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">Sponsor Formu</a>
-                               </li>
-                               <li><strong>Ücretler:</strong> İade edilmeyen 100$ başvuru ve kayıt ücretini ödeyin.</li>`,
-                step2Content: `<li>Resmi <strong>Kabul Mektubunuz</strong>.</li>
-                               <li><strong>I-20 Formunuz</strong> (ABD'ye girmek için gereken çok önemli bir belge).</li>`,
-                step3Content: `<li><strong>SEVIS Ücretini Ödeyin:</strong> "I-901" ücretini çevrimiçi ödeyin ve makbuzu yazdırın.</li>
-                               <li><strong>Mülakat Randevusu Alın:</strong> En yakın ABD Büyükelçiliği/Konsolosluğunda randevu alın.</li>
-                               <li><strong>Mülakata Gidin:</strong> Belgelerinizi götürün, mülakatı geçin ve F-1 Vizenizi bastırın!</li>`,
-                step4Content: `<li><strong>ABD'ye Uçun:</strong> Sınır görevlilerine pasaportunuzu, vizenizi ve I-20 formunuzu gösterin.</li>
-                               <li><strong>Okula Gidin:</strong> Başlangıç tarihinden önce şahsen DreamIT ESL'ye gidin.</li>
-                               <li><strong>Sınava Girin:</strong> Seviye tespit sınavına girin.</li>
-                               <li><strong>Ödemeyi Tamamlayın:</strong> Dersleri seçin ve kalan ücreti ödeyin.</li>
-                               <li><strong>Oryantasyon:</strong> Karşılama toplantısına katılın ve başlayın!</li>`
+            tr: {
+                heroTitle: "<b>/</b>nasıl katılınır<br>dreamIT esl.",
+                heroSub: "Uluslararası bir öğrenci olarak ABD'de eğitim almaya giden basit, adım adım rehber.",
+                warnTitle: "⚠️ Kritik Kural",
+                warn1: "Tüm belgeleriniz <span class='highlight-pdf'>PDF formatında</span> gönderilmelidir! Resim veya ekran görüntüsü göndermeyin.",
+                warn2: "🗣️ Ayrıca tüm evraklarınız İngilizce olmalıdır. Başlamadan önce okul kataloğunu okuyun.",
+                step1Title: "<b>/</b>okula başvurun",
+                step2Title: "<b>/</b>belgelerinizi alın",
+                step3Title: "<b>/</b>vizenizi alın",
+                step4Title: "<b>/</b>seyahat ve başlangıç!",
+                step1Content: `
+                    <li><strong>Pasaportunuz:</strong> En az 6 ay daha geçerli PDF kopyası.</li>
+                    <li><strong>Diploma:</strong> Lise veya üstü diplomanızın PDF kopyası.</li>
+                    <li><strong>Banka Hesap Özeti:</strong> Yeterli paranız olduğunu kanıtlayan PDF.
+                        <ul class="sub-list">
+                            <li>60 günden eski olmamalıdır.</li>
+                            <li>En az 15.000 USD göstermelidir (her aile üyesi için +3.500$).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Ücretler:</strong> İade edilmeyen 100$ başvuru ücretini ödeyin.</li>`,
+                step2Content: `
+                    <li><strong>Kabul Mektubu:</strong> Okuldan resmi kabul mektubunuz.</li>
+                    <li><strong>I-20 Formu:</strong> ABD'ye girmek için gereken çok önemli bir belge.</li>`,
+                step3Content: `
+                    <li><strong>SEVIS Ücreti:</strong> "I-901" ücretini çevrimiçi ödeyin.</li>
+                    <li><strong>Mülakat Randevusu:</strong> En yakın ABD Büyükelçiliğinde randevu alın.</li>
+                    <li><strong>Mülakata Gidin:</strong> Mülakatı geçin ve F-1 Vizenizi alın!</li>`,
+                step4Content: `
+                    <li><strong>ABD'ye Uçun:</strong> Sınırda pasaport, vize ve I-20 formunu gösterin.</li>
+                    <li><strong>Okula Gidin:</strong> Başlangıç tarihinden önce şahsen DreamIT'e gidin.</li>
+                    <li><strong>Sınava Girin:</strong> Seviye tespit sınavına girin.</li>
+                    <li><strong>Ödemeyi Tamamlayın:</strong> Dersleri seçin ve kalan ücreti ödeyin.</li>
+                    <li><strong>Oryantasyon:</strong> Hoş geldin toplantısına katılın ve başlayın!</li>`
             },
-            hi: { 
-                navTitle: "🌐 अपनी भाषा क्षेत्र चुनें",
-                mainTitle: "DreamIT ESL में कैसे शामिल हों",
-                subTitle: "अंतरराष्ट्रीय छात्रों के लिए सरल चरण-दर-चरण मार्गदर्शिका",
-                warning: "आपके सभी दस्तावेज़ <u>अनिवार्य रूप से</u> <strong>PDF प्रारूप</strong> में भेजे जाने चाहिए! चित्र, स्क्रीनशॉट या वर्ड दस्तावेज़ न भेजें। सभी कागजात अंग्रेजी में (या अनुवादित) भी होने चाहिए।",
-                step1Title: "चरण 1: स्कूल में आवेदन करें",
-                step2Title: "चरण 2: अपने स्कूल के कागजात प्राप्त करें",
-                step3Title: "चरण 3: अपना अमेरिकी छात्र वीज़ा प्राप्त करें",
-                step4Title: "चरण 4: यात्रा करें और कक्षाएं शुरू करें!",
-                loading: "पृष्ठ लोड हो रहा है...",
-                step1Content: `<li><strong>आपका पासपोर्ट:</strong> कम से कम 6 महीने के लिए वैध <span class="highlight">PDF कॉपी</span>।</li>
-                               <li><strong>स्कूल डिप्लोमा:</strong> आपके हाई स्कूल डिप्लोमा या उच्चतर की <span class="highlight">PDF कॉपी</span>।</li>
-                               <li><strong>बैंक स्टेटमेंट:</strong> धन साबित करने वाली <span class="highlight">PDF कॉपी</span>। 60 दिन से कम पुरानी होनी चाहिए और कम से कम $15,000 USD दिखानी चाहिए।
-                                   <br><em>यदि कोई अन्य व्यक्ति (प्रायोजक) आपकी पढ़ाई का खर्च उठा रहा है, तो उन्हें इसे डाउनलोड करके भरना होगा:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">प्रायोजक फॉर्म</a>
-                               </li>
-                               <li><strong>फीस:</strong> गैर-वापसी योग्य $100 आवेदन शुल्क और पंजीकरण शुल्क का भुगतान करें।</li>`,
-                step2Content: `<li>आपका आधिकारिक <strong>स्वीकृति पत्र</strong>।</li>
-                               <li>आपका <strong>फॉर्म I-20</strong> (अमेरिका में प्रवेश के लिए आवश्यक एक बहुत महत्वपूर्ण सरकारी दस्तावेज़)।</li>`,
-                step3Content: `<li><strong>SEVIS शुल्क का भुगतान करें:</strong> ऑनलाइन "I-901 शुल्क" का भुगतान करें और रसीद प्रिंट करें।</li>
-                               <li><strong>साक्षात्कार बुक करें:</strong> निकटतम अमेरिकी दूतावास/वाणिज्य दूतावास में एक बैठक निर्धारित करें।</li>
-                               <li><strong>साक्षात्कार के लिए जाएं:</strong> अपने कागजात लाएं, साक्षात्कार पास करें, और अपना F-1 वीज़ा स्टैम्प करवाएं!</li>`,
-                step4Content: `<li><strong>अमेरिका के लिए उड़ान भरें:</strong> सीमा अधिकारियों को अपना पासपोर्ट, वीज़ा और फॉर्म I-20 दिखाएं।</li>
-                               <li><strong>स्कूल जाएं:</strong> अपनी प्रारंभ तिथि से पहले व्यक्तिगत रूप से DreamIT ESL में रिपोर्ट करें।</li>
-                               <li><strong>परीक्षा दें:</strong> सही कक्षा में फिट होने के लिए प्लेसमेंट टेस्ट दें।</li>
-                               <li><strong>भुगतान पूरा करें:</strong> कक्षाएं चुनें और शेष ट्यूशन का भुगतान करें।</li>
-                               <li><strong>ओरिएंटेशन:</strong> स्वागत बैठक में भाग लें और शुरू करें!</li>`
+            hi: {
+                heroTitle: "<b>/</b>कैसे शामिल हों<br>dreamIT esl.",
+                heroSub: "अंतरराष्ट्रीय छात्र के रूप में अमेरिका में अध्ययन करने के लिए सरल, चरण-दर-चरण मार्गदर्शिका।",
+                warnTitle: "⚠️ महत्वपूर्ण नियम",
+                warn1: "सभी दस्तावेज़ <span class='highlight-pdf'>PDF प्रारूप</span> में होने चाहिए! कोई चित्र या स्क्रीनशॉट नहीं।",
+                warn2: "🗣️ सभी कागजात अंग्रेजी में होने चाहिए। शुरू करने से पहले स्कूल के नियम पढ़ें।",
+                step1Title: "<b>/</b>स्कूल में आवेदन करें",
+                step2Title: "<b>/</b>कागजात प्राप्त करें",
+                step3Title: "<b>/</b>छात्र वीज़ा प्राप्त करें",
+                step4Title: "<b>/</b>कक्षाएं शुरू करें!",
+                step1Content: `
+                    <li><strong>पासपोर्ट:</strong> कम से कम 6 महीने के लिए वैध PDF कॉपी।</li>
+                    <li><strong>डिप्लोमा:</strong> हाई स्कूल या उच्चतर की PDF कॉपी।</li>
+                    <li><strong>बैंक स्टेटमेंट:</strong> पर्याप्त पैसे साबित करने वाली PDF।
+                        <ul class="sub-list">
+                            <li>60 दिन से कम पुरानी होनी चाहिए।</li>
+                            <li>कम से कम $15,000 USD दिखाना चाहिए।</li>
+                        </ul>
+                    </li>
+                    <li><strong>फीस:</strong> गैर-वापसी योग्य $100 आवेदन शुल्क का भुगतान करें।</li>`,
+                step2Content: `
+                    <li><strong>स्वीकृति पत्र:</strong> स्कूल से आधिकारिक पत्र।</li>
+                    <li><strong>फॉर्म I-20:</strong> अमेरिका में प्रवेश के लिए आवश्यक महत्वपूर्ण दस्तावेज़।</li>`,
+                step3Content: `
+                    <li><strong>SEVIS शुल्क:</strong> ऑनलाइन "I-901" शुल्क का भुगतान करें।</li>
+                    <li><strong>साक्षात्कार बुक करें:</strong> निकटतम अमेरिकी दूतावास में बैठक निर्धारित करें।</li>
+                    <li><strong>साक्षात्कार के लिए जाएं:</strong> साक्षात्कार पास करें और F-1 वीज़ा प्राप्त करें!</li>`,
+                step4Content: `
+                    <li><strong>अमेरिका के लिए उड़ान:</strong> अधिकारियों को पासपोर्ट, वीज़ा और I-20 दिखाएं।</li>
+                    <li><strong>स्कूल जाएं:</strong> प्रारंभ तिथि से पहले DreamIT ESL पहुंचें।</li>
+                    <li><strong>परीक्षा दें:</strong> प्लेसमेंट टेस्ट दें।</li>
+                    <li><strong>भुगतान पूरा करें:</strong> कक्षाएं चुनें और ट्यूशन का भुगतान करें।</li>
+                    <li><strong>ओरिएंटेशन:</strong> स्वागत बैठक में भाग लें और शुरू करें!</li>`
             },
-            ko: { 
-                navTitle: "🌐 언어 지역 선택",
-                mainTitle: "DreamIT ESL 등록 방법",
-                subTitle: "유학생을 위한 단계별 간단 가이드",
-                warning: "모든 서류는 <u>반드시</u> <strong>PDF 형식</strong>으로 제출해야 합니다! 사진, 스크린샷 또는 Word 문서를 보내지 마십시오. 모든 서류는 영어로 작성되거나 번역되어야 합니다.",
-                step1Title: "1단계: 학교 지원",
-                step2Title: "2단계: 학교 서류 수령",
-                step3Title: "3단계: 미국 학생 비자 발급",
-                step4Title: "4단계: 출국 및 수업 시작!",
-                loading: "페이지 로딩 중...",
-                step1Content: `<li><strong>여권:</strong> 최소 6개월 이상 유효한 <span class="highlight">PDF 사본</span>.</li>
-                               <li><strong>졸업 증명서:</strong> 고등학교 또는 그 이상의 졸업 증명서 <span class="highlight">PDF 사본</span>.</li>
-                               <li><strong>은행 잔고 증명서:</strong> 자금을 증명하는 <span class="highlight">PDF 사본</span>. 60일 이내에 발급되어야 하며 최소 $15,000 USD가 있어야 합니다.
-                                   <br><em>다른 사람(재정 보증인)이 학비를 지원하는 경우, 다음 양식을 다운로드하여 작성해야 합니다:</em><br>
-                                   <a href="https://drive.google.com/file/d/1rV3Jbkq4Lz75ktgDcuB4n4W-tIpY4EJ4/view" target="_blank" class="action-btn">재정 보증인 양식</a>
-                               </li>
-                               <li><strong>수수료:</strong> 환불 불가한 신청비 $100와 등록비를 지불하세요.</li>`,
-                step2Content: `<li>공식 <strong>입학 허가서</strong>.</li>
-                               <li><strong>I-20 양식</strong> (미국 입국에 필요한 매우 중요한 정부 문서).</li>`,
-                step3Content: `<li><strong>SEVIS 수수료 납부:</strong> 온라인으로 "I-901 수수료"를 납부하고 영수증을 출력하세요.</li>
-                               <li><strong>인터뷰 예약:</strong> 가장 가까운 미국 대사관/영사관에 인터뷰를 예약하세요.</li>
-                               <li><strong>인터뷰 참석:</strong> 서류 지참하고 인터뷰에 합격하여 F-1 비자 스탬프를 받으세요!</li>`,
-                step4Content: `<li><strong>미국으로 출국:</strong> 입국 심사관에게 여권, 비자 및 I-20 양식을 보여주세요.</li>
-                               <li><strong>학교 방문:</strong> 시작일 전에 DreamIT ESL에 직접 방문하여 보고하세요.</li>
-                               <li><strong>레벨 테스트:</strong> 본인에게 맞는 수업을 찾기 위해 배치 고사를 치르세요.</li>
-                               <li><strong>결제 완료:</strong> 수업을 선택하고 남은 학비를 결제하세요.</li>
-                               <li><strong>오리엔테이션:</strong> 환영회에 참석하고 수업을 시작하세요!</li>`
+            ko: {
+                heroTitle: "<b>/</b>가입 방법<br>dreamIT esl.",
+                heroSub: "유학생으로서 미국으로 유학을 가기 위한 간단하고 단계별 가이드.",
+                warnTitle: "⚠️ 필수 규칙",
+                warn1: "모든 서류는 <span class='highlight-pdf'>PDF 형식</span>으로 보내야 합니다! 사진이나 스크린샷은 안 됩니다.",
+                warn2: "🗣️ 또한 모든 서류는 영어로 작성되어야 합니다. 시작 전 학교 규정을 읽어보세요.",
+                step1Title: "<b>/</b>학교 지원하기",
+                step2Title: "<b>/</b>학교 서류 받기",
+                step3Title: "<b>/</b>학생 비자 받기",
+                step4Title: "<b>/</b>출국 및 수업 시작!",
+                step1Content: `
+                    <li><strong>여권:</strong> 최소 6개월 이상 유효한 PDF 사본.</li>
+                    <li><strong>졸업 증명서:</strong> 고등학교 이상의 졸업 증명서 PDF.</li>
+                    <li><strong>은행 잔고 증명서:</strong> 자금을 증명하는 PDF.
+                        <ul class="sub-list">
+                            <li>60일 이내에 발급되어야 합니다.</li>
+                            <li>최소 $15,000 USD를 증명해야 합니다.</li>
+                        </ul>
+                    </li>
+                    <li><strong>수수료:</strong> 환불 불가한 $100 신청비를 지불하세요.</li>`,
+                step2Content: `
+                    <li><strong>입학 허가서:</strong> 학교의 공식 입학 허가서.</li>
+                    <li><strong>I-20 양식:</strong> 미국 입국에 필요한 매우 중요한 문서.</li>`,
+                step3Content: `
+                    <li><strong>SEVIS 수수료:</strong> 온라인으로 "I-901" 수수료 지불.</li>
+                    <li><strong>인터뷰 예약:</strong> 가장 가까운 미국 대사관에 예약.</li>
+                    <li><strong>인터뷰 참석:</strong> 인터뷰를 통과하고 F-1 비자를 받으세요!</li>`,
+                step4Content: `
+                    <li><strong>미국으로 비행:</strong> 입국 심사관에게 서류를 보여주세요.</li>
+                    <li><strong>학교 가기:</strong> 시작일 전에 학교에 직접 방문하세요.</li>
+                    <li><strong>레벨 테스트:</strong> 배치 고사를 치르세요.</li>
+                    <li><strong>결제 완료:</strong> 수업을 선택하고 학비를 지불하세요.</li>
+                    <li><strong>오리엔테이션:</strong> 오리엔테이션에 참석하고 첫날을 시작하세요!</li>`
             }
         };
 
-        function openLanguagePage(langCode, element) {
-            const links = document.querySelectorAll('.nav-link');
-            links.forEach(link => link.classList.remove('active'));
-            element.classList.add('active');
+        function switchLang(lang, btnElement) {
+            // Update Active Tab
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
 
-            const loader = document.getElementById('loader');
-            const pageContent = document.getElementById('page-content');
-            const t = translations[langCode];
-            
-            document.getElementById('loading-text').innerText = t.loading;
-            loader.style.display = 'flex';
-            pageContent.style.opacity = '0'; 
+            // Fade Out Content
+            const wrapper = document.getElementById('content-wrapper');
+            wrapper.style.opacity = 0;
 
+            // Wait for fade out, swap content, fade in
             setTimeout(() => {
-                document.getElementById('nav-title').innerHTML = t.navTitle;
-                document.getElementById('main-title').innerHTML = t.mainTitle;
-                document.getElementById('sub-title').innerHTML = t.subTitle;
-                document.getElementById('warning-text').innerHTML = t.warning;
-                document.getElementById('step1-title').innerHTML = t.step1Title;
-                document.getElementById('step2-title').innerHTML = t.step2Title;
-                document.getElementById('step3-title').innerHTML = t.step3Title;
-                document.getElementById('step4-title').innerHTML = t.step4Title;
+                const t = translations[lang];
                 
-                document.getElementById('step1-content').innerHTML = t.step1Content;
-                document.getElementById('step2-content').innerHTML = t.step2Content;
-                document.getElementById('step3-content').innerHTML = t.step3Content;
-                document.getElementById('step4-content').innerHTML = t.step4Content;
-
-                const cards = document.querySelectorAll('.step-card');
-                cards.forEach(card => {
-                    card.style.animation = 'none';
-                    card.offsetHeight; 
-                    card.style.animation = 'slideUpFade 0.8s forwards'; 
-                });
-
-                loader.style.display = 'none';
-                pageContent.style.opacity = '1';
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                document.getElementById('t-hero-title').innerHTML = t.heroTitle;
+                document.getElementById('t-hero-sub').innerHTML = t.heroSub;
                 
-            }, 800);
+                document.getElementById('t-warn-title').innerHTML = t.warnTitle;
+                document.getElementById('t-warn-1').innerHTML = t.warn1;
+                document.getElementById('t-warn-2').innerHTML = t.warn2;
+                
+                document.getElementById('t-step1-title').innerHTML = t.step1Title;
+                document.getElementById('t-step1-content').innerHTML = t.step1Content;
+                
+                document.getElementById('t-step2-title').innerHTML = t.step2Title;
+                document.getElementById('t-step2-content').innerHTML = t.step2Content;
+                
+                document.getElementById('t-step3-title').innerHTML = t.step3Title;
+                document.getElementById('t-step3-content').innerHTML = t.step3Content;
+                
+                document.getElementById('t-step4-title').innerHTML = t.step4Title;
+                document.getElementById('t-step4-content').innerHTML = t.step4Content;
+
+                wrapper.style.opacity = 1;
+            }, 400);
         }
     </script>
 </body>
