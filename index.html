@@ -6,388 +6,667 @@
     <title>DreamIT ESL — Student Guide</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
     
     <style>
         :root {
-            --bg-dark: #0a0a0a;
-            --surface: #141414;
-            --surface-border: rgba(255, 255, 255, 0.08);
-            --accent: #504FED;
-            --accent-hover: #6b6afa;
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --danger: #ef4444;
-            --danger-bg: rgba(239, 68, 68, 0.1);
+            --bg-color: #fafafa;
+            --text-color: #050411;
+            --accent-color: #e6e6e6;
+            --danger-color: #ff4a4a;
+            --success-color: #10b981;
+            --glow-color: rgba(80, 79, 237, 0.15);
+            --font-main: 'Inter', sans-serif;
+            --font-display: 'Syne', sans-serif;
+            --transition-smooth: cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #050411;
+            --text-color: #ffffff;
+            --accent-color: #222222;
+            --glow-color: rgba(80, 79, 237, 0.25);
         }
 
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family: 'Manrope', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            line-height: 1.6;
+            font-family: var(--font-main);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             overflow-x: hidden;
-            cursor: default;
+            -webkit-font-smoothing: antialiased;
+            cursor: none; 
+            transition: background-color 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
         }
 
-        /* --- CUSTOM CURSOR GLOW --- */
+        /* Custom Cursor (Agent Portal Style) */
+        .cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 20px;
+            height: 20px;
+            background-color: var(--text-color);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s var(--transition-smooth), height 0.3s var(--transition-smooth), background-color 0.3s var(--transition-smooth);
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hovering {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+        }
+
+        /* Moving Bubble Glow (Student Guide Style) */
         .cursor-glow {
             position: fixed;
             top: 0;
             left: 0;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(80, 79, 237, 0.15) 0%, transparent 60%);
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%);
             border-radius: 50%;
             pointer-events: none;
             transform: translate(-50%, -50%);
-            z-index: 9999;
-            transition: opacity 0.3s ease;
-            mix-blend-mode: screen;
+            z-index: 9998;
+            transition: background 0.8s var(--transition-smooth);
         }
 
-        /* --- NAVIGATION --- */
-        .nav-wrapper {
-            position: sticky;
+        /* Typography */
+        h1, h2, h3, h4 {
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+
+        a, button {
+            text-decoration: none;
+            color: inherit;
+            cursor: none;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
             top: 0;
+            width: 100%;
+            padding: 1.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
             z-index: 100;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--surface-border);
-            padding: 1rem 2rem;
+            transition: padding 0.5s ease, background 0.5s ease;
         }
 
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+            color: #fff;
+        }
+
+        header.scrolled {
+            padding: 1rem 4rem;
+            background: rgba(5, 4, 17, 0.05);
+            backdrop-filter: blur(15px);
+        }
+
+        header.scrolled .header-top {
+            mix-blend-mode: normal;
+            color: var(--text-color);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        /* Language Switcher Nav */
         .nav-scroll {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             overflow-x: auto;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none;  /* IE/Edge */
+            scrollbar-width: none;
+            padding-bottom: 0.5rem;
         }
 
-        .nav-scroll::-webkit-scrollbar {
-            display: none; /* Chrome/Safari */
-        }
+        .nav-scroll::-webkit-scrollbar { display: none; }
 
         .lang-btn {
-            background: transparent;
-            border: 1px solid var(--surface-border);
-            color: var(--text-muted);
-            padding: 0.6rem 1.2rem;
+            border: 1px solid var(--accent-color);
+            color: var(--text-color);
+            padding: 0.5rem 1.2rem;
             border-radius: 100px;
-            font-family: inherit;
-            font-weight: 600;
             font-size: 0.85rem;
-            cursor: pointer;
+            font-weight: 600;
             white-space: nowrap;
             transition: all 0.3s ease;
-            text-transform: lowercase;
+            opacity: 0.7;
+        }
+
+        header.scrolled .lang-btn {
+            border-color: var(--text-color);
         }
 
         .lang-btn:hover {
-            color: var(--text-main);
-            border-color: var(--text-muted);
+            opacity: 1;
         }
 
         .lang-btn.active {
-            background: var(--text-main);
-            color: var(--bg-dark);
-            border-color: var(--text-main);
+            background: var(--text-color);
+            color: var(--bg-color);
+            border-color: var(--text-color);
+            opacity: 1;
         }
 
-        /* --- CONTENT WRAPPER (For Transitions) --- */
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 4rem;
+        }
+
+        .section-pad {
+            padding: 8rem 0;
+        }
+
         #content-wrapper {
             opacity: 1;
             transition: opacity 0.4s ease;
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 4rem 2rem;
         }
 
-        /* --- HERO SECTION --- */
+        /* Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 1s var(--transition-smooth), transform 1s var(--transition-smooth);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Hero Section */
         .hero {
-            margin-bottom: 4rem;
-        }
-
-        .hero-title {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 800;
-            line-height: 1.1;
-            letter-spacing: -0.03em;
-            margin-bottom: 1.5rem;
-            text-transform: lowercase;
-        }
-
-        .title-accent { color: var(--accent); }
-        .hero-title b { color: var(--accent); font-weight: 800; }
-
-        .hero-subtitle {
-            font-size: 1.25rem;
-            color: var(--text-muted);
-            max-width: 600px;
-        }
-
-        /* --- WARNING / STATEMENT SECTION --- */
-        .statement-box {
-            background: var(--danger-bg);
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 16px;
-            padding: 2.5rem;
-            margin-bottom: 6rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .statement-box::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--danger);
-        }
-
-        .statement-title {
-            color: var(--danger);
-            font-size: 1.2rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
+            height: 100vh;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-        }
-
-        .statement-text {
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-
-        .statement-text:last-child { margin-bottom: 0; }
-        .highlight-pdf { font-weight: 800; color: #fff; text-decoration: underline; text-decoration-color: var(--danger); }
-
-        /* --- INTERACTIVE STACKING CARDS (STEPS) --- */
-        .steps-container {
             position: relative;
-            padding-bottom: 4rem;
+            overflow: hidden;
+            padding-top: 5rem;
         }
 
-        .step-card {
-            position: sticky;
-            background: var(--surface);
-            border: 1px solid var(--surface-border);
-            border-radius: 24px;
-            padding: 3rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
-            transition: transform 0.3s ease, filter 0.3s ease;
-        }
-
-        /* Stacking offsets */
-        .step-card:nth-child(1) { top: 100px; z-index: 1; }
-        .step-card:nth-child(2) { top: 120px; z-index: 2; }
-        .step-card:nth-child(3) { top: 140px; z-index: 3; }
-        .step-card:nth-child(4) { top: 160px; z-index: 4; }
-
-        .step-header {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid var(--surface-border);
-            padding-bottom: 1.5rem;
-        }
-
-        .step-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--surface-border);
+        .hero h1 {
+            font-size: clamp(3rem, 7vw, 8rem);
             line-height: 1;
-            margin-right: 1.5rem;
+            letter-spacing: -2px;
+            max-width: 1200px;
         }
 
-        .step-title {
-            font-size: 1.75rem;
-            font-weight: 800;
-            text-transform: lowercase;
+        .hero-text-line {
+            overflow: hidden;
+            display: block;
         }
 
-        .step-title b { color: var(--accent); }
+        .hero-text-line span {
+            display: block;
+            transform: translateY(100%);
+            animation: slideUp 1.2s var(--transition-smooth) forwards;
+        }
 
-        .step-content ul {
+        .hero-text-line:nth-child(2) span { animation-delay: 0.15s; }
+        .hero-text-line:nth-child(3) span { animation-delay: 0.3s; }
+
+        @keyframes slideUp { to { transform: translateY(0); } }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: #666;
+            max-width: 600px;
+            margin-top: 2rem;
+            line-height: 1.4;
+            animation: fadeIn 1.5s ease forwards;
+            animation-delay: 0.6s;
+            opacity: 0;
+        }
+
+        [data-theme="dark"] .hero-subtitle { color: #aaa; }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .hero-graphic {
+            position: absolute;
+            right: -5%;
+            top: 20%;
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(45deg, var(--accent-color), var(--bg-color));
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            animation: morphShape 15s ease-in-out infinite alternate;
+            z-index: -1;
+            opacity: 0.6;
+            transition: background 0.8s var(--transition-smooth);
+        }
+
+        @keyframes morphShape {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+            67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
+            100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+        }
+
+        /* Section Headers */
+        .section-header {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -1px;
+        }
+        
+        .section-intro {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin-bottom: 4rem;
+            line-height: 1.4;
+            color: #666;
+        }
+        
+        [data-theme="dark"] .section-intro { color: #aaa; }
+
+        /* Highlight classes */
+        .highlight-pdf {
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: underline;
+            text-decoration-color: var(--danger-color);
+        }
+
+        /* Accordion Style */
+        .accordion {
+            border-top: 2px solid var(--text-color);
+        }
+
+        .accordion-item {
+            border-bottom: 1px solid var(--accent-color);
+            position: relative;
+        }
+
+        .accordion-header {
+            width: 100%;
+            padding: 2.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            transition: color 0.3s ease;
+            text-align: left;
+        }
+
+        .accordion-header:hover { opacity: 0.6; }
+
+        .accordion-icon {
+            font-size: 2rem;
+            font-weight: 300;
+            transition: transform 0.5s var(--transition-smooth);
+        }
+
+        .accordion-item.active .accordion-icon { transform: rotate(45deg); }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.8s var(--transition-smooth);
+        }
+
+        .accordion-inner { padding-bottom: 3rem; }
+
+        .guide-list {
             list-style: none;
         }
 
-        .step-content li {
+        .guide-list li {
             position: relative;
-            padding-left: 2rem;
+            font-size: 1.25rem;
+            line-height: 1.6;
             margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-            color: var(--text-muted);
+            padding-left: 2rem;
+            color: #444;
         }
+        
+        [data-theme="dark"] .guide-list li { color: #bbb; }
 
-        .step-content li strong {
-            color: var(--text-main);
-            font-weight: 600;
-            display: block;
-            margin-bottom: 0.25rem;
-        }
-
-        .step-content li::before {
-            content: '→';
+        .guide-list.bullet li::before {
+            content: "•";
             position: absolute;
             left: 0;
-            top: 2px;
-            color: var(--accent);
-            font-weight: 800;
+            color: var(--text-color);
+            font-weight: bold;
         }
+
+        .guide-list li strong { color: var(--text-color); }
 
         .sub-list {
             margin-top: 0.75rem;
             padding-left: 1rem;
-            border-left: 1px solid var(--surface-border);
+            border-left: 2px solid var(--accent-color);
+            list-style: none;
         }
 
         .sub-list li {
             padding-left: 1rem;
             margin-bottom: 0.5rem;
-            font-size: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .sub-list li::before { content: "-"; color: var(--text-color); }
+
+        /* Marquee */
+        .marquee-wrapper {
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 4rem 0;
+            border-top: 1px solid var(--accent-color);
+            border-bottom: 1px solid var(--accent-color);
+            background-color: var(--bg-color);
+            position: relative;
+            transition: background 0.8s var(--transition-smooth);
+        }
+        
+        .marquee-wrapper::before, .marquee-wrapper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 150px;
+            height: 100%;
+            z-index: 2;
+        }
+        
+        .marquee-wrapper::before { background: linear-gradient(to right, var(--bg-color) 0%, transparent 100%); }
+        .marquee-wrapper::after { background: linear-gradient(to left, var(--bg-color) 0%, transparent 100%); }
+
+        .marquee {
+            display: inline-block;
+            animation: marquee 25s linear infinite;
         }
 
-        .sub-list li::before { content: '•'; color: var(--text-muted); }
+        .marquee span {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            margin: 0 2rem;
+            color: transparent;
+            -webkit-text-stroke: 1px var(--text-color);
+        }
 
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Footer */
+        footer {
+            background-color: #050411;
+            color: #fff;
+            padding: 6rem 0 2rem 0;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            header { padding: 1.5rem 2rem; }
+            .container { padding: 0 2rem; }
+        }
+        
         @media (max-width: 768px) {
-            .hero-title { font-size: 2.5rem; }
-            .step-card { padding: 2rem; }
-            .step-number { font-size: 2rem; }
-            .step-title { font-size: 1.4rem; }
-            .cursor-glow { display: none; } /* Disable custom cursor on mobile */
+            .hero h1 { font-size: 3.5rem; }
+            .accordion-header { font-size: 1.5rem; }
+            .guide-list li { font-size: 1.1rem; }
+            .cursor { display: none; }
         }
     </style>
 </head>
 <body>
 
     <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="cursor" id="custom-cursor"></div>
 
-    <nav class="nav-wrapper">
-        <div class="nav-scroll">
-            <button class="lang-btn active" onclick="switchLang('en', this)">english</button>
-            <button class="lang-btn" onclick="switchLang('es', this)">méxico (es)</button>
-            <button class="lang-btn" onclick="switchLang('zh', this)">china (zh)</button>
-            <button class="lang-btn" onclick="switchLang('th', this)">thailand (th)</button>
-            <button class="lang-btn" onclick="switchLang('bn', this)">bangladesh (bn)</button>
-            <button class="lang-btn" onclick="switchLang('kk', this)">kazakhstan (kk)</button>
-            <button class="lang-btn" onclick="switchLang('tr', this)">turkey (tr)</button>
-            <button class="lang-btn" onclick="switchLang('hi', this)">india (hi)</button>
-            <button class="lang-btn" onclick="switchLang('ko', this)">korea (ko)</button>
+    <header id="main-header">
+        <div class="header-top">
+            <a href="#" class="logo">DreamIT ESL</a>
         </div>
-    </nav>
+        <nav class="nav-scroll">
+            <button class="lang-btn active hover-target" onclick="switchLang('en', this)">english</button>
+            <button class="lang-btn hover-target" onclick="switchLang('es', this)">español</button>
+            <button class="lang-btn hover-target" onclick="switchLang('zh', this)">中文</button>
+            <button class="lang-btn hover-target" onclick="switchLang('th', this)">ไทย</button>
+            <button class="lang-btn hover-target" onclick="switchLang('bn', this)">বাংলা</button>
+            <button class="lang-btn hover-target" onclick="switchLang('kk', this)">қазақша</button>
+            <button class="lang-btn hover-target" onclick="switchLang('tr', this)">türkçe</button>
+            <button class="lang-btn hover-target" onclick="switchLang('hi', this)">हिन्दी</button>
+            <button class="lang-btn hover-target" onclick="switchLang('ko', this)">한국어</button>
+        </nav>
+    </header>
 
     <main id="content-wrapper">
         
-        <section class="hero">
-            <h1 class="hero-title" id="t-hero-title"><b>/</b>how to join<br>dreamIT esl.</h1>
-            <p class="hero-subtitle" id="t-hero-sub">The simple, step-by-step guide to moving from your home country to studying in the U.S. as an International Student.</p>
+        <section class="hero container" data-theme-trigger="light">
+            <div class="hero-graphic"></div>
+            <div>
+                <h1 class="hero-title" id="t-hero-title">
+                    <span class="hero-text-line"><span>How to join</span></span>
+                    <span class="hero-text-line"><span>DreamIT ESL.</span></span>
+                </h1>
+                <p class="hero-subtitle" id="t-hero-sub">The simple, step-by-step guide to moving from your home country to studying in the U.S. as an International Student.</p>
+            </div>
         </section>
 
-        <section class="statement-box">
-            <div class="statement-title" id="t-warn-title">⚠️ Critical Rule</div>
-            <p class="statement-text" id="t-warn-1">All of your documents MUST be sent in <span class="highlight-pdf">PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.</p>
-            <p class="statement-text" id="t-warn-2">🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.</p>
+        <section class="section-pad container" data-theme-trigger="dark">
+            <h2 class="section-header reveal" id="t-warn-title">⚠️ Critical Rule</h2>
+            <p class="section-intro reveal" id="t-warn-1">All of your documents MUST be sent in <span class="highlight-pdf">PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.</p>
+            <p class="section-intro reveal" id="t-warn-2">🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.</p>
         </section>
 
-        <section class="steps-container">
+        <section class="marquee-wrapper">
+            <div class="marquee">
+                <span>PDF FORMAT ONLY</span> <span>ENGLISH TRANSLATIONS REQUIRED</span> <span>READ CATALOG</span>
+                <span>PDF FORMAT ONLY</span> <span>ENGLISH TRANSLATIONS REQUIRED</span> <span>READ CATALOG</span>
+            </div>
+        </section>
+
+        <section class="section-pad container" data-theme-trigger="light">
+            <h2 class="section-header reveal" id="t-steps-main">The Step-by-Step Process</h2>
             
-            <article class="step-card">
-                <div class="step-header">
-                    <span class="step-number">01</span>
-                    <h2 class="step-title" id="t-step1-title"><b>/</b>apply to the school</h2>
-                </div>
-                <div class="step-content">
-                    <ul id="t-step1-content">
-                        <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
-                        <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
-                        <li><strong>Bank Statement:</strong> A PDF copy of a paper from your bank proving you have enough money to live and study.
-                            <ul class="sub-list">
-                                <li>It must be less than 60 days old.</li>
-                                <li>It must show at least $15,000 USD (plus $3,500 for each family member coming with you).</li>
+            <div class="accordion reveal">
+                <div class="accordion-item">
+                    <button class="accordion-header hover-target">
+                        <span id="t-step1-title">01. Apply to the school</span> <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul class="guide-list bullet" id="t-step1-content">
+                                <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
+                                <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
+                                <li><strong>Bank Statement:</strong> A PDF copy of a paper from your bank proving you have enough money to live and study.
+                                    <ul class="sub-list">
+                                        <li>It must be less than 60 days old.</li>
+                                        <li>It must show at least $15,000 USD (plus $3,500 for each family member coming with you).</li>
+                                    </ul>
+                                </li>
+                                <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee, along with any registration and tuition fees required by the school.</li>
                             </ul>
-                        </li>
-                        <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee, along with any registration and tuition fees required by the school.</li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
-            </article>
 
-            <article class="step-card">
-                <div class="step-header">
-                    <span class="step-number">02</span>
-                    <h2 class="step-title" id="t-step2-title"><b>/</b>get your school papers</h2>
+                <div class="accordion-item">
+                    <button class="accordion-header hover-target">
+                        <span id="t-step2-title">02. Get your school papers</span> <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul class="guide-list bullet" id="t-step2-content">
+                                <li><strong>Acceptance Letter:</strong> Your official Acceptance Letter from the school.</li>
+                                <li><strong>Form I-20:</strong> A super important government document you need to enter the U.S.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="step-content">
-                    <ul id="t-step2-content">
-                        <li><strong>Acceptance Letter:</strong> Your official Acceptance Letter from the school.</li>
-                        <li><strong>Form I-20:</strong> A super important government document you need to enter the U.S.</li>
-                    </ul>
-                </div>
-            </article>
 
-            <article class="step-card">
-                <div class="step-header">
-                    <span class="step-number">03</span>
-                    <h2 class="step-title" id="t-step3-title"><b>/</b>get your student visa</h2>
+                <div class="accordion-item">
+                    <button class="accordion-header hover-target">
+                        <span id="t-step3-title">03. Get your student visa</span> <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul class="guide-list bullet" id="t-step3-content">
+                                <li><strong>Pay the SEVIS Fee:</strong> Pay the government "I-901 fee" online and print the receipt.</li>
+                                <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy or Consulate in your country.</li>
+                                <li><strong>Go to Your Interview:</strong> Bring your school papers, pass your interview, and get your F-1 Student Visa stamped inside your passport!</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="step-content">
-                    <ul id="t-step3-content">
-                        <li><strong>Pay the SEVIS Fee:</strong> Pay the government "I-901 fee" online and print the receipt.</li>
-                        <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy or Consulate in your country.</li>
-                        <li><strong>Go to Your Interview:</strong> Bring your school papers, pass your interview, and get your F-1 Student Visa stamped inside your passport!</li>
-                    </ul>
-                </div>
-            </article>
 
-            <article class="step-card">
-                <div class="step-header">
-                    <span class="step-number">04</span>
-                    <h2 class="step-title" id="t-step4-title"><b>/</b>travel and start classes!</h2>
+                <div class="accordion-item">
+                    <button class="accordion-header hover-target">
+                        <span id="t-step4-title">04. Travel and start classes!</span> <span class="accordion-icon">+</span>
+                    </button>
+                    <div class="accordion-content">
+                        <div class="accordion-inner">
+                            <ul class="guide-list bullet" id="t-step4-content">
+                                <li><strong>Fly to the U.S.:</strong> Show the border officers your passport, visa, and Form I-20 to enter the country.</li>
+                                <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before the "start date" written on your Form I-20.</li>
+                                <li><strong>Take a Test:</strong> Take a placement test so the teachers know which English class is the perfect fit for you.</li>
+                                <li><strong>Finish Paying & Sign Up:</strong> Pick your classes and complete any remaining tuition payments.</li>
+                                <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <div class="step-content">
-                    <ul id="t-step4-content">
-                        <li><strong>Fly to the U.S.:</strong> Show the border officers your passport, visa, and Form I-20 to enter the country.</li>
-                        <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before the "start date" written on your Form I-20.</li>
-                        <li><strong>Take a Test:</strong> Take a placement test so the teachers know which English class is the perfect fit for you.</li>
-                        <li><strong>Finish Paying & Sign Up:</strong> Pick your classes and complete any remaining tuition payments.</li>
-                        <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>
-                    </ul>
-                </div>
-            </article>
 
+            </div>
         </section>
+
     </main>
 
+    <footer>
+        <div class="container reveal">
+            <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem;">DreamIT ESL</h2>
+            <p style="color: #666;">International Student Guide &copy; 2024</p>
+        </div>
+    </footer>
+
     <script>
-        // Custom Cursor Logic
-        const glow = document.getElementById('cursorGlow');
+        // Dual Cursor Logic (Dot + Glow)
+        const dotCursor = document.getElementById('custom-cursor');
+        const glowCursor = document.getElementById('cursorGlow');
+        const hoverTargets = document.querySelectorAll('.hover-target, a, button');
+
         document.addEventListener('mousemove', (e) => {
-            glow.style.left = e.clientX + 'px';
-            glow.style.top = e.clientY + 'px';
+            dotCursor.style.left = e.clientX + 'px';
+            dotCursor.style.top = e.clientY + 'px';
+            
+            glowCursor.style.left = e.clientX + 'px';
+            glowCursor.style.top = e.clientY + 'px';
+        });
+
+        function attachHoverEvents() {
+            document.querySelectorAll('.hover-target, a, button').forEach(target => {
+                target.addEventListener('mouseenter', () => dotCursor.classList.add('hovering'));
+                target.addEventListener('mouseleave', () => dotCursor.classList.remove('hovering'));
+            });
+        }
+        attachHoverEvents();
+
+        // Header Scroll Effect
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Scroll Reveal Animation
+        const revealOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
+        const revealOnScroll = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                entry.target.classList.add('active');
+                observer.unobserve(entry.target);
+            });
+        }, revealOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => revealOnScroll.observe(el));
+
+        // Dynamic Theme Switching
+        const themeTriggers = document.querySelectorAll('[data-theme-trigger]');
+        const body = document.body;
+        
+        const themeOptions = { threshold: 0.4 };
+        const themeObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const theme = entry.target.getAttribute('data-theme-trigger');
+                    if (theme === 'dark') {
+                        body.setAttribute('data-theme', 'dark');
+                    } else {
+                        body.removeAttribute('data-theme');
+                    }
+                }
+            });
+        }, themeOptions);
+
+        themeTriggers.forEach(trigger => themeObserver.observe(trigger));
+
+        // Accordion Logic
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const content = item.querySelector('.accordion-content');
+                
+                item.classList.toggle('active');
+                
+                if (item.classList.contains('active')) {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } else {
+                    content.style.maxHeight = null;
+                }
+            });
         });
 
         // Translation Dictionary
         const translations = {
             en: {
-                heroTitle: "<b>/</b>how to join<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>How to join</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "The simple, step-by-step guide to moving from your home country to studying in the U.S. as an International Student.",
                 warnTitle: "⚠️ Critical Rule",
                 warn1: "All of your documents MUST be sent in <span class='highlight-pdf'>PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.",
                 warn2: "🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.",
-                step1Title: "<b>/</b>apply to the school",
-                step2Title: "<b>/</b>get your school papers",
-                step3Title: "<b>/</b>get your student visa",
-                step4Title: "<b>/</b>travel and start classes!",
+                stepsMain: "The Step-by-Step Process",
+                step1Title: "01. Apply to the school",
+                step2Title: "02. Get your school papers",
+                step3Title: "03. Get your student visa",
+                step4Title: "04. Travel and start classes!",
                 step1Content: `
                     <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
                     <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
@@ -413,15 +692,16 @@
                     <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>`
             },
             es: {
-                heroTitle: "<b>/</b>cómo unirse a<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>Cómo unirse a</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "La guía sencilla paso a paso para mudarse de su país de origen a estudiar en EE. UU. como estudiante internacional.",
                 warnTitle: "⚠️ Regla Crítica",
                 warn1: "¡Todos sus documentos DEBEN enviarse en <span class='highlight-pdf'>formato PDF!</span> No envíe fotos ni capturas de pantalla. Deben ser PDFs.",
                 warn2: "🗣️ Además, todos sus documentos deben estar en inglés (o traducidos). Recuerde leer el catálogo de la escuela y las reglas de reembolso antes de comenzar.",
-                step1Title: "<b>/</b>aplicar a la escuela",
-                step2Title: "<b>/</b>obtener sus documentos",
-                step3Title: "<b>/</b>obtener su visa",
-                step4Title: "<b>/</b>viajar y comenzar!",
+                stepsMain: "Proceso Paso a Paso",
+                step1Title: "01. Aplicar a la escuela",
+                step2Title: "02. Obtener sus documentos",
+                step3Title: "03. Obtener su visa",
+                step4Title: "04. ¡Viajar y comenzar!",
                 step1Content: `
                     <li><strong>Su Pasaporte:</strong> Una copia en PDF válida por al menos 6 meses más.</li>
                     <li><strong>Diploma Escolar:</strong> Una copia en PDF de su diploma de secundaria o superior.</li>
@@ -447,15 +727,16 @@
                     <li><strong>Ir a Orientación:</strong> ¡Asista a la reunión de bienvenida y comience su primer día!</li>`
             },
             zh: {
-                heroTitle: "<b>/</b>如何加入<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>如何加入</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "留学生从祖国搬到美国学习的简单分步指南。",
                 warnTitle: "⚠️ 关键规则",
                 warn1: "您所有的文件必须以 <span class='highlight-pdf'>PDF 格式</span> 发送！不要发送图片或手机截图。它们必须是PDF。",
                 warn2: "🗣️ 此外，您所有的文件必须是英文（或翻译成英文）。开始前请记得阅读学校的目录和退款规则。",
-                step1Title: "<b>/</b>申请学校",
-                step2Title: "<b>/</b>获取学校文件",
-                step3Title: "<b>/</b>获取学生签证",
-                step4Title: "<b>/</b>旅行并开始上课！",
+                stepsMain: "分步申请流程",
+                step1Title: "01. 申请学校",
+                step2Title: "02. 获取学校文件",
+                step3Title: "03. 获取学生签证",
+                step4Title: "04. 旅行并开始上课！",
                 step1Content: `
                     <li><strong>您的护照：</strong>护照的 PDF 副本。必须至少还有 6 个月的有效期。</li>
                     <li><strong>毕业证书：</strong>高中或以上学历证书的 PDF 副本。</li>
@@ -481,15 +762,16 @@
                     <li><strong>参加迎新：</strong>参加迎新会，领取学生手册，开始第一天的学校生活！</li>`
             },
             th: {
-                heroTitle: "<b>/</b>วิธีเข้าร่วม<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>วิธีเข้าร่วม</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "คำแนะนำทีละขั้นตอนง่ายๆ สำหรับการย้ายจากประเทศบ้านเกิดมาเรียนที่สหรัฐอเมริกา",
                 warnTitle: "⚠️ กฎสำคัญ",
                 warn1: "เอกสารทั้งหมดต้องส่งเป็น <span class='highlight-pdf'>ไฟล์ PDF เท่านั้น!</span> ห้ามส่งรูปถ่ายหรือภาพหน้าจอ",
                 warn2: "🗣️ เอกสารทั้งหมดต้องเป็นภาษาอังกฤษ (หรือแปลแล้ว) โปรดอ่านแคตตาล็อกและกฎการคืนเงินก่อนเริ่ม",
-                step1Title: "<b>/</b>สมัครเข้าเรียน",
-                step2Title: "<b>/</b>รับเอกสาร",
-                step3Title: "<b>/</b>ขอวีซ่านักเรียน",
-                step4Title: "<b>/</b>เดินทางและเริ่มเรียน!",
+                stepsMain: "ขั้นตอนการสมัคร",
+                step1Title: "01. สมัครเข้าเรียน",
+                step2Title: "02. รับเอกสาร",
+                step3Title: "03. ขอวีซ่านักเรียน",
+                step4Title: "04. เดินทางและเริ่มเรียน!",
                 step1Content: `
                     <li><strong>หนังสือเดินทาง:</strong> สำเนา PDF ที่มีอายุเหลืออย่างน้อย 6 เดือน</li>
                     <li><strong>วุฒิการศึกษา:</strong> สำเนา PDF ของประกาศนียบัตรมัธยมปลายหรือสูงกว่า</li>
@@ -515,15 +797,16 @@
                     <li><strong>ปฐมนิเทศ:</strong> เข้าร่วมงานต้อนรับและเริ่มเรียนวันแรก!</li>`
             },
             bn: {
-                heroTitle: "<b>/</b>কিভাবে যোগ দেবেন<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>কিভাবে যোগ দেবেন</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "আন্তর্জাতিক ছাত্র হিসেবে মার্কিন যুক্তরাষ্ট্রে পড়তে আসার সহজ নির্দেশিকা।",
                 warnTitle: "⚠️ গুরুত্বপূর্ণ নিয়ম",
                 warn1: "সমস্ত নথি <span class='highlight-pdf'>PDF ফর্ম্যাটে</span> পাঠাতে হবে! কোনো ছবি বা স্ক্রিনশট নয়।",
                 warn2: "🗣️ সমস্ত কাগজপত্র ইংরেজিতে হতে হবে। শুরু করার আগে স্কুলের ক্যাটালগ এবং রিফান্ড রুলস পড়ুন।",
-                step1Title: "<b>/</b>স্কুলে আবেদন করুন",
-                step2Title: "<b>/</b>কাগজপত্র পান",
-                step3Title: "<b>/</b>ভিসা পান",
-                step4Title: "<b>/</b>ভ্রমণ এবং ক্লাস শুরু!",
+                stepsMain: "আবেদন প্রক্রিয়া",
+                step1Title: "01. স্কুলে আবেদন করুন",
+                step2Title: "02. কাগজপত্র পান",
+                step3Title: "03. ভিসা পান",
+                step4Title: "04. ভ্রমণ এবং ক্লাস শুরু!",
                 step1Content: `
                     <li><strong>পাসপোর্ট:</strong> অন্তত ৬ মাস মেয়াদ আছে এমন পাসপোর্টের PDF।</li>
                     <li><strong>ডিপ্লোমা:</strong> হাই স্কুল বা উচ্চতর ডিগ্রির PDF।</li>
@@ -549,15 +832,16 @@
                     <li><strong>ওরিয়েন্টেশন:</strong> স্বাগত সভায় যোগ দিন এবং শুরু করুন!</li>`
             },
             kk: {
-                heroTitle: "<b>/</b>қалай қосылуға болады<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>Қалай қосылуға болады</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "АҚШ-қа халықаралық студент ретінде оқуға барудың қарапайым қадамдық нұсқаулығы.",
                 warnTitle: "⚠️ Маңызды ереже",
                 warn1: "Барлық құжаттар <span class='highlight-pdf'>PDF форматында</span> болуы тиіс! Суреттерді жібермеңіз.",
                 warn2: "🗣️ Барлық құжаттар ағылшын тілінде болуы керек. Мектеп ережелерімен танысыңыз.",
-                step1Title: "<b>/</b>мектепке өтініш беру",
-                step2Title: "<b>/</b>құжаттарды алу",
-                step3Title: "<b>/</b>виза алу",
-                step4Title: "<b>/</b>оқуды бастау!",
+                stepsMain: "Өтініш беру процесі",
+                step1Title: "01. Мектепке өтініш беру",
+                step2Title: "02. Құжаттарды алу",
+                step3Title: "03. Виза алу",
+                step4Title: "04. Оқуды бастау!",
                 step1Content: `
                     <li><strong>Төлқұжат:</strong> Кемінде 6 ай жарамды PDF көшірме.</li>
                     <li><strong>Диплом:</strong> Орта немесе жоғары білім туралы PDF көшірме.</li>
@@ -583,15 +867,16 @@
                     <li><strong>Бағдарлау:</strong> Қарсы алу жиналысына қатысып, оқуды бастаңыз!</li>`
             },
             tr: {
-                heroTitle: "<b>/</b>nasıl katılınır<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>Nasıl Katılınır</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "Uluslararası bir öğrenci olarak ABD'de eğitim almaya giden basit, adım adım rehber.",
                 warnTitle: "⚠️ Kritik Kural",
                 warn1: "Tüm belgeleriniz <span class='highlight-pdf'>PDF formatında</span> gönderilmelidir! Resim veya ekran görüntüsü göndermeyin.",
                 warn2: "🗣️ Ayrıca tüm evraklarınız İngilizce olmalıdır. Başlamadan önce okul kataloğunu okuyun.",
-                step1Title: "<b>/</b>okula başvurun",
-                step2Title: "<b>/</b>belgelerinizi alın",
-                step3Title: "<b>/</b>vizenizi alın",
-                step4Title: "<b>/</b>seyahat ve başlangıç!",
+                stepsMain: "Adım Adım Süreç",
+                step1Title: "01. Okula başvurun",
+                step2Title: "02. Belgelerinizi alın",
+                step3Title: "03. Vizenizi alın",
+                step4Title: "04. Seyahat ve başlangıç!",
                 step1Content: `
                     <li><strong>Pasaportunuz:</strong> En az 6 ay daha geçerli PDF kopyası.</li>
                     <li><strong>Diploma:</strong> Lise veya üstü diplomanızın PDF kopyası.</li>
@@ -617,15 +902,16 @@
                     <li><strong>Oryantasyon:</strong> Hoş geldin toplantısına katılın ve başlayın!</li>`
             },
             hi: {
-                heroTitle: "<b>/</b>कैसे शामिल हों<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>कैसे शामिल हों</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "अंतरराष्ट्रीय छात्र के रूप में अमेरिका में अध्ययन करने के लिए सरल, चरण-दर-चरण मार्गदर्शिका।",
                 warnTitle: "⚠️ महत्वपूर्ण नियम",
                 warn1: "सभी दस्तावेज़ <span class='highlight-pdf'>PDF प्रारूप</span> में होने चाहिए! कोई चित्र या स्क्रीनशॉट नहीं।",
                 warn2: "🗣️ सभी कागजात अंग्रेजी में होने चाहिए। शुरू करने से पहले स्कूल के नियम पढ़ें।",
-                step1Title: "<b>/</b>स्कूल में आवेदन करें",
-                step2Title: "<b>/</b>कागजात प्राप्त करें",
-                step3Title: "<b>/</b>छात्र वीज़ा प्राप्त करें",
-                step4Title: "<b>/</b>कक्षाएं शुरू करें!",
+                stepsMain: "चरण-दर-चरण प्रक्रिया",
+                step1Title: "01. स्कूल में आवेदन करें",
+                step2Title: "02. कागजात प्राप्त करें",
+                step3Title: "03. छात्र वीज़ा प्राप्त करें",
+                step4Title: "04. कक्षाएं शुरू करें!",
                 step1Content: `
                     <li><strong>पासपोर्ट:</strong> कम से कम 6 महीने के लिए वैध PDF कॉपी।</li>
                     <li><strong>डिप्लोमा:</strong> हाई स्कूल या उच्चतर की PDF कॉपी।</li>
@@ -651,15 +937,16 @@
                     <li><strong>ओरिएंटेशन:</strong> स्वागत बैठक में भाग लें और शुरू करें!</li>`
             },
             ko: {
-                heroTitle: "<b>/</b>가입 방법<br>dreamIT esl.",
+                heroTitle: '<span class="hero-text-line"><span>가입 방법</span></span><span class="hero-text-line"><span>DreamIT ESL.</span></span>',
                 heroSub: "유학생으로서 미국으로 유학을 가기 위한 간단하고 단계별 가이드.",
                 warnTitle: "⚠️ 필수 규칙",
                 warn1: "모든 서류는 <span class='highlight-pdf'>PDF 형식</span>으로 보내야 합니다! 사진이나 스크린샷은 안 됩니다.",
                 warn2: "🗣️ 또한 모든 서류는 영어로 작성되어야 합니다. 시작 전 학교 규정을 읽어보세요.",
-                step1Title: "<b>/</b>학교 지원하기",
-                step2Title: "<b>/</b>학교 서류 받기",
-                step3Title: "<b>/</b>학생 비자 받기",
-                step4Title: "<b>/</b>출국 및 수업 시작!",
+                stepsMain: "단계별 가이드",
+                step1Title: "01. 학교 지원하기",
+                step2Title: "02. 학교 서류 받기",
+                step3Title: "03. 학생 비자 받기",
+                step4Title: "04. 출국 및 수업 시작!",
                 step1Content: `
                     <li><strong>여권:</strong> 최소 6개월 이상 유효한 PDF 사본.</li>
                     <li><strong>졸업 증명서:</strong> 고등학교 이상의 졸업 증명서 PDF.</li>
@@ -687,15 +974,12 @@
         };
 
         function switchLang(lang, btnElement) {
-            // Update Active Tab
             document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
 
-            // Fade Out Content
             const wrapper = document.getElementById('content-wrapper');
             wrapper.style.opacity = 0;
 
-            // Wait for fade out, swap content, fade in
             setTimeout(() => {
                 const t = translations[lang];
                 
@@ -705,6 +989,8 @@
                 document.getElementById('t-warn-title').innerHTML = t.warnTitle;
                 document.getElementById('t-warn-1').innerHTML = t.warn1;
                 document.getElementById('t-warn-2').innerHTML = t.warn2;
+
+                document.getElementById('t-steps-main').innerHTML = t.stepsMain;
                 
                 document.getElementById('t-step1-title').innerHTML = t.step1Title;
                 document.getElementById('t-step1-content').innerHTML = t.step1Content;
@@ -718,6 +1004,8 @@
                 document.getElementById('t-step4-title').innerHTML = t.step4Title;
                 document.getElementById('t-step4-content').innerHTML = t.step4Content;
 
+                attachHoverEvents(); // Re-attach hover events to new HTML elements
+                
                 wrapper.style.opacity = 1;
             }, 400);
         }
