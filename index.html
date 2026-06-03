@@ -45,8 +45,8 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Ensures words do not arbitrarily break mid-word unless absolutely necessary */
-            word-break: normal;
+            /* Ensures words do not arbitrarily break mid-word and remain contained */
+            word-break: keep-all; 
             overflow-wrap: break-word;
             hyphens: none;
         }
@@ -101,7 +101,7 @@
             pointer-events: none;
         }
 
-        /* Custom Cursor */
+        /* Custom Cursor (No floating bubble) */
         .cursor {
             position: fixed;
             top: 0;
@@ -233,6 +233,17 @@
         }
 
         /* Layout & Glass Containers */
+        
+        /* Flexbox structure on content wrapper to guarantee PERFECTLY EVEN spacing between frameworks */
+        #content-wrapper {
+            opacity: 1;
+            transition: opacity 0.4s ease;
+            display: flex;
+            flex-direction: column;
+            gap: 6rem; /* Ensures strictly symmetrical gap between frameworks */
+            padding-bottom: 6rem; /* Spacing before the footer */
+        }
+
         .container {
             max-width: 1000px;
             margin: 0 auto;
@@ -241,12 +252,7 @@
         }
 
         .section-pad {
-            padding: 6rem 0;
-        }
-
-        #content-wrapper {
-            opacity: 1;
-            transition: opacity 0.4s ease;
+            padding: 0; /* Padding removed so flex gap dictates exact spacing */
         }
 
         .glass-panel {
@@ -274,7 +280,7 @@
 
         /* Hero Section */
         .hero {
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -484,6 +490,7 @@
         }
         
         @media (max-width: 768px) {
+            #content-wrapper { gap: 4rem; padding-bottom: 4rem; } /* Even symmetric spacing for mobile */
             header { padding: 1rem 1.5rem; gap: 1rem; }
             .nav-scroll { justify-content: flex-start; }
             .hero h1 { font-size: 3.2rem; }
