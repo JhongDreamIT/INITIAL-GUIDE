@@ -10,41 +10,98 @@
     
     <style>
         :root {
-            --bg-color: #fafafa;
-            --text-color: #050411;
-            --accent-color: #e6e6e6;
+            /* Default Dark Mode */
+            --text-color: #ffffff;
+            --accent-color: rgba(255, 255, 255, 0.2);
             --danger-color: #ff4a4a;
-            --success-color: #10b981;
-            --glow-color: rgba(80, 79, 237, 0.15);
+            --success-color: #34d399;
+            
+            /* Glassmorphism Variables for Dark Mode */
+            --glass-bg: rgba(10, 10, 15, 0.65);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+            --header-bg: rgba(10, 10, 15, 0.85);
+            
             --font-main: 'Inter', sans-serif;
             --font-display: 'Syne', sans-serif;
             --transition-smooth: cubic-bezier(0.19, 1, 0.22, 1);
         }
 
-        [data-theme="dark"] {
-            --bg-color: #050411;
-            --text-color: #ffffff;
-            --accent-color: #222222;
-            --glow-color: rgba(80, 79, 237, 0.25);
+        /* Light Mode Switch */
+        [data-theme="light"] {
+            --text-color: #050411;
+            --accent-color: rgba(0, 0, 0, 0.15);
+            --danger-color: #e63946;
+            --success-color: #10b981;
+            
+            /* Glassmorphism Variables for Light Mode */
+            --glass-bg: rgba(255, 255, 255, 0.75);
+            --glass-border: rgba(255, 255, 255, 0.4);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+            --header-bg: rgba(255, 255, 255, 0.85);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            /* Ensures words do not arbitrarily break mid-word unless absolutely necessary */
+            word-break: normal;
+            overflow-wrap: break-word;
+            hyphens: none;
         }
 
         body {
             font-family: var(--font-main);
-            background-color: var(--bg-color);
             color: var(--text-color);
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             cursor: none; 
-            transition: background-color 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
+            transition: color 0.8s var(--transition-smooth);
+            background-color: #000; 
         }
 
-        /* Custom Cursor (Agent Portal Style) */
+        /* --- VISIBLE BACKGROUND VIDEO LAYER --- */
+        .video-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background-color: #000;
+        }
+
+        .video-background video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transition: opacity 0.5s linear;
+        }
+
+        #bg-video-top {
+            opacity: 1; 
+        }
+
+        #bg-video-bottom {
+            opacity: 0; 
+        }
+
+        /* Overlay to ensure videos are clearly visible while keeping text readable */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        /* Custom Cursor */
         .cursor {
             position: fixed;
             top: 0;
@@ -64,21 +121,6 @@
             width: 60px;
             height: 60px;
             background-color: #fff;
-        }
-
-        /* Moving Bubble Glow (Student Guide Style) */
-        .cursor-glow {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, var(--glow-color) 0%, transparent 60%);
-            border-radius: 50%;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9998;
-            transition: background 0.8s var(--transition-smooth);
         }
 
         /* Typography */
@@ -107,25 +149,27 @@
             gap: 1.5rem;
             z-index: 100;
             transition: padding 0.5s ease, background 0.5s ease;
+            color: #fff;
         }
 
         .header-top {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            mix-blend-mode: difference;
-            color: #fff;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         header.scrolled {
             padding: 1rem 4rem;
-            background: rgba(5, 4, 17, 0.05);
-            backdrop-filter: blur(15px);
+            background: var(--header-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-color);
         }
 
         header.scrolled .header-top {
-            mix-blend-mode: normal;
-            color: var(--text-color);
+            text-shadow: none;
         }
 
         .logo {
@@ -141,51 +185,79 @@
             overflow-x: auto;
             scrollbar-width: none;
             padding-bottom: 0.5rem;
+            justify-content: center;
         }
 
         .nav-scroll::-webkit-scrollbar { display: none; }
 
         .lang-btn {
-            border: 1px solid var(--accent-color);
-            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            color: #fff;
             padding: 0.5rem 1.2rem;
             border-radius: 100px;
             font-size: 0.85rem;
             font-weight: 600;
             white-space: nowrap;
             transition: all 0.3s ease;
-            opacity: 0.7;
+            opacity: 0.8;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.4);
         }
 
         header.scrolled .lang-btn {
-            border-color: var(--text-color);
+            border-color: var(--accent-color);
+            color: var(--text-color);
+            text-shadow: none;
         }
 
         .lang-btn:hover {
             opacity: 1;
+            border-color: #fff;
+        }
+
+        header.scrolled .lang-btn:hover {
+            border-color: var(--text-color);
         }
 
         .lang-btn.active {
-            background: var(--text-color);
-            color: var(--bg-color);
-            border-color: var(--text-color);
+            background: #fff;
+            color: #000;
+            border-color: #fff;
             opacity: 1;
+            text-shadow: none;
         }
 
-        /* Layout */
+        header.scrolled .lang-btn.active {
+            background: var(--text-color);
+            color: var(--glass-bg);
+            border-color: var(--text-color);
+        }
+
+        /* Layout & Glass Containers */
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             padding: 0 4rem;
+            width: 100%;
         }
 
         .section-pad {
-            padding: 8rem 0;
+            padding: 6rem 0;
         }
 
         #content-wrapper {
             opacity: 1;
             transition: opacity 0.4s ease;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3.5rem;
+            box-shadow: var(--glass-shadow);
+            transition: background 0.8s var(--transition-smooth), border-color 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
         }
 
         /* Reveal Animations */
@@ -204,17 +276,22 @@
         .hero {
             height: 100vh;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            text-align: center;
             position: relative;
-            overflow: hidden;
             padding-top: 5rem;
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 7vw, 8rem);
-            line-height: 1;
+            font-size: clamp(3rem, 7vw, 7rem);
+            line-height: 1.1;
             letter-spacing: -2px;
-            max-width: 1200px;
+            max-width: 1000px;
+            color: #ffffff; 
+            text-shadow: 0 8px 30px rgba(0,0,0,0.8); 
+            margin: 0 auto;
         }
 
         .hero-text-line {
@@ -229,64 +306,40 @@
         }
 
         .hero-text-line:nth-child(2) span { animation-delay: 0.15s; }
-        .hero-text-line:nth-child(3) span { animation-delay: 0.3s; }
 
         @keyframes slideUp { to { transform: translateY(0); } }
 
         .hero-subtitle {
-            font-size: 1.5rem;
-            color: #666;
+            font-size: 1.3rem;
+            color: #f1f1f1;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
             max-width: 600px;
-            margin-top: 2rem;
-            line-height: 1.4;
+            margin: 1.5rem auto 0;
+            line-height: 1.5;
             animation: fadeIn 1.5s ease forwards;
             animation-delay: 0.6s;
             opacity: 0;
         }
 
-        [data-theme="dark"] .hero-subtitle { color: #aaa; }
-
         @keyframes fadeIn { to { opacity: 1; } }
-
-        .hero-graphic {
-            position: absolute;
-            right: -5%;
-            top: 20%;
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(45deg, var(--accent-color), var(--bg-color));
-            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-            animation: morphShape 15s ease-in-out infinite alternate;
-            z-index: -1;
-            opacity: 0.6;
-            transition: background 0.8s var(--transition-smooth);
-        }
-
-        @keyframes morphShape {
-            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-            34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
-            67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
-            100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
-        }
 
         /* Section Headers */
         .section-header {
-            font-size: 3rem;
+            font-size: clamp(2rem, 4vw, 3rem);
             margin-bottom: 1.5rem;
             letter-spacing: -1px;
+            text-align: center;
         }
         
         .section-intro {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             max-width: 800px;
-            margin-bottom: 4rem;
-            line-height: 1.4;
-            color: #666;
+            margin: 0 auto 2rem auto;
+            line-height: 1.5;
+            text-align: center;
+            opacity: 0.9;
         }
-        
-        [data-theme="dark"] .section-intro { color: #aaa; }
 
-        /* Highlight classes */
         .highlight-pdf {
             font-weight: 700;
             color: var(--text-color);
@@ -297,6 +350,8 @@
         /* Accordion Style */
         .accordion {
             border-top: 2px solid var(--text-color);
+            margin-top: 3rem;
+            text-align: left;
         }
 
         .accordion-item {
@@ -313,14 +368,14 @@
             background: none;
             border: none;
             font-family: var(--font-display);
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 600;
             color: var(--text-color);
-            transition: color 0.3s ease;
+            transition: opacity 0.3s ease;
             text-align: left;
         }
 
-        .accordion-header:hover { opacity: 0.6; }
+        .accordion-header:hover { opacity: 0.7; }
 
         .accordion-icon {
             font-size: 2rem;
@@ -344,14 +399,12 @@
 
         .guide-list li {
             position: relative;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             line-height: 1.6;
             margin-bottom: 1.5rem;
-            padding-left: 2rem;
-            color: #444;
+            padding-left: 1.8rem;
+            opacity: 0.9;
         }
-        
-        [data-theme="dark"] .guide-list li { color: #bbb; }
 
         .guide-list.bullet li::before {
             content: "•";
@@ -361,7 +414,7 @@
             font-weight: bold;
         }
 
-        .guide-list li strong { color: var(--text-color); }
+        .guide-list li strong { color: var(--text-color); font-weight: 700; }
 
         .sub-list {
             margin-top: 0.75rem;
@@ -373,7 +426,7 @@
         .sub-list li {
             padding-left: 1rem;
             margin-bottom: 0.5rem;
-            font-size: 1.1rem;
+            font-size: 1.05rem;
         }
         
         .sub-list li::before { content: "-"; color: var(--text-color); }
@@ -383,24 +436,14 @@
             overflow: hidden;
             white-space: nowrap;
             padding: 4rem 0;
-            border-top: 1px solid var(--accent-color);
-            border-bottom: 1px solid var(--accent-color);
-            background-color: var(--bg-color);
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             position: relative;
             transition: background 0.8s var(--transition-smooth);
         }
-        
-        .marquee-wrapper::before, .marquee-wrapper::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            width: 150px;
-            height: 100%;
-            z-index: 2;
-        }
-        
-        .marquee-wrapper::before { background: linear-gradient(to right, var(--bg-color) 0%, transparent 100%); }
-        .marquee-wrapper::after { background: linear-gradient(to left, var(--bg-color) 0%, transparent 100%); }
 
         .marquee {
             display: inline-block;
@@ -423,29 +466,50 @@
 
         /* Footer */
         footer {
-            background-color: #050411;
-            color: #fff;
-            padding: 6rem 0 2rem 0;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            color: var(--text-color);
+            padding: 4rem 0;
             text-align: center;
+            border-top: 1px solid var(--glass-border);
+            transition: background 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
         }
 
-        /* Responsive */
+        /* Responsive Formatting */
         @media (max-width: 1024px) {
             header { padding: 1.5rem 2rem; }
             .container { padding: 0 2rem; }
+            .glass-panel { padding: 2.5rem; }
         }
         
         @media (max-width: 768px) {
-            .hero h1 { font-size: 3.5rem; }
-            .accordion-header { font-size: 1.5rem; }
-            .guide-list li { font-size: 1.1rem; }
-            .cursor { display: none; }
+            header { padding: 1rem 1.5rem; gap: 1rem; }
+            .nav-scroll { justify-content: flex-start; }
+            .hero h1 { font-size: 3.2rem; }
+            .hero-subtitle { font-size: 1.1rem; padding: 0 1rem; }
+            .section-header { font-size: 2.2rem; }
+            .section-intro { font-size: 1.1rem; }
+            .accordion-header { font-size: 1.4rem; padding: 2rem 0; }
+            .guide-list li { font-size: 1.05rem; }
+            .marquee span { font-size: 2rem; }
+            .cursor { display: none; } /* Hide custom cursor on mobile */
+            .glass-panel { padding: 2rem 1.5rem; border-radius: 16px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="cursor-glow" id="cursorGlow"></div>
+    <div class="video-background">
+        <video id="bg-video-top" autoplay loop muted playsinline>
+            <source src="Plane.mp4" type="video/mp4">
+        </video>
+        <video id="bg-video-bottom" autoplay loop muted playsinline>
+            <source src="Friend.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay"></div>
+    </div>
+
     <div class="cursor" id="custom-cursor"></div>
 
     <header id="main-header">
@@ -468,7 +532,6 @@
     <main id="content-wrapper">
         
         <section class="hero container" data-theme-trigger="light">
-            <div class="hero-graphic"></div>
             <div>
                 <h1 class="hero-title" id="t-hero-title">
                     <span class="hero-text-line"><span>How to join</span></span>
@@ -478,90 +541,94 @@
             </div>
         </section>
 
-        <section class="section-pad container" data-theme-trigger="dark">
-            <h2 class="section-header reveal" id="t-warn-title">⚠️ Critical Rule</h2>
-            <p class="section-intro reveal" id="t-warn-1">All of your documents MUST be sent in <span class="highlight-pdf">PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.</p>
-            <p class="section-intro reveal" id="t-warn-2">🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.</p>
+        <section class="section-pad container reveal" data-theme-trigger="dark">
+            <div class="glass-panel">
+                <h2 class="section-header" id="t-warn-title">⚠️ Critical Rule</h2>
+                <p class="section-intro" id="t-warn-1">All of your documents MUST be sent in <span class="highlight-pdf">PDF format!</span> Do not send pictures, phone screenshots, or word documents. They must be PDFs.</p>
+                <p class="section-intro" id="t-warn-2" style="margin-bottom: 0;">🗣️ Also, all of your papers must be written in English (or translated into English). Remember to read the school’s catalog and refund rules before you start.</p>
+            </div>
         </section>
 
-        <section class="marquee-wrapper">
+        <section class="marquee-wrapper reveal" data-theme-trigger="dark">
             <div class="marquee">
                 <span>PDF FORMAT ONLY</span> <span>ENGLISH TRANSLATIONS REQUIRED</span> <span>READ CATALOG</span>
                 <span>PDF FORMAT ONLY</span> <span>ENGLISH TRANSLATIONS REQUIRED</span> <span>READ CATALOG</span>
             </div>
         </section>
 
-        <section class="section-pad container" data-theme-trigger="light">
-            <h2 class="section-header reveal" id="t-steps-main">The Step-by-Step Process</h2>
-            
-            <div class="accordion reveal">
-                <div class="accordion-item">
-                    <button class="accordion-header hover-target">
-                        <span id="t-step1-title">01. Apply to the school</span> <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <div class="accordion-inner">
-                            <ul class="guide-list bullet" id="t-step1-content">
-                                <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
-                                <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
-                                <li><strong>Bank Statement:</strong> A PDF copy of a paper from your bank proving you have enough money to live and study.
-                                    <ul class="sub-list">
-                                        <li>It must be less than 60 days old.</li>
-                                        <li>It must show at least $15,000 USD (plus $3,500 for each family member coming with you).</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee, along with any registration and tuition fees required by the school.</li>
-                            </ul>
+        <section class="section-pad container reveal" data-theme-trigger="light">
+            <div class="glass-panel">
+                <h2 class="section-header" id="t-steps-main">The Step-by-Step Process</h2>
+                
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <button class="accordion-header hover-target">
+                            <span id="t-step1-title">01. Apply to the school</span> <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="guide-list bullet" id="t-step1-content">
+                                    <li><strong>Your Passport:</strong> A PDF copy of your passport. It must be valid for at least 6 more months.</li>
+                                    <li><strong>School Diploma:</strong> A PDF copy of your high school diploma (or a higher college degree).</li>
+                                    <li><strong>Bank Statement:</strong> A PDF copy of a paper from your bank proving you have enough money to live and study.
+                                        <ul class="sub-list">
+                                            <li>It must be less than 60 days old.</li>
+                                            <li>It must show at least $15,000 USD (plus $3,500 for each family member coming with you).</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Fees & Tuition:</strong> Pay the non-refundable $100 application fee, along with any registration and tuition fees required by the school.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="accordion-item">
-                    <button class="accordion-header hover-target">
-                        <span id="t-step2-title">02. Get your school papers</span> <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <div class="accordion-inner">
-                            <ul class="guide-list bullet" id="t-step2-content">
-                                <li><strong>Acceptance Letter:</strong> Your official Acceptance Letter from the school.</li>
-                                <li><strong>Form I-20:</strong> A super important government document you need to enter the U.S.</li>
-                            </ul>
+                    <div class="accordion-item">
+                        <button class="accordion-header hover-target">
+                            <span id="t-step2-title">02. Get your school papers</span> <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="guide-list bullet" id="t-step2-content">
+                                    <li><strong>Acceptance Letter:</strong> Your official Acceptance Letter from the school.</li>
+                                    <li><strong>Form I-20:</strong> A super important government document you need to enter the U.S.</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="accordion-item">
-                    <button class="accordion-header hover-target">
-                        <span id="t-step3-title">03. Get your student visa</span> <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <div class="accordion-inner">
-                            <ul class="guide-list bullet" id="t-step3-content">
-                                <li><strong>Pay the SEVIS Fee:</strong> Pay the government "I-901 fee" online and print the receipt.</li>
-                                <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy or Consulate in your country.</li>
-                                <li><strong>Go to Your Interview:</strong> Bring your school papers, pass your interview, and get your F-1 Student Visa stamped inside your passport!</li>
-                            </ul>
+                    <div class="accordion-item">
+                        <button class="accordion-header hover-target">
+                            <span id="t-step3-title">03. Get your student visa</span> <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="guide-list bullet" id="t-step3-content">
+                                    <li><strong>Pay the SEVIS Fee:</strong> Pay the government "I-901 fee" online and print the receipt.</li>
+                                    <li><strong>Book an Interview:</strong> Schedule a meeting at the nearest U.S. Embassy or Consulate in your country.</li>
+                                    <li><strong>Go to Your Interview:</strong> Bring your school papers, pass your interview, and get your F-1 Student Visa stamped inside your passport!</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="accordion-item">
-                    <button class="accordion-header hover-target">
-                        <span id="t-step4-title">04. Travel and start classes!</span> <span class="accordion-icon">+</span>
-                    </button>
-                    <div class="accordion-content">
-                        <div class="accordion-inner">
-                            <ul class="guide-list bullet" id="t-step4-content">
-                                <li><strong>Fly to the U.S.:</strong> Show the border officers your passport, visa, and Form I-20 to enter the country.</li>
-                                <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before the "start date" written on your Form I-20.</li>
-                                <li><strong>Take a Test:</strong> Take a placement test so the teachers know which English class is the perfect fit for you.</li>
-                                <li><strong>Finish Paying & Sign Up:</strong> Pick your classes and complete any remaining tuition payments.</li>
-                                <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>
-                            </ul>
+                    <div class="accordion-item">
+                        <button class="accordion-header hover-target">
+                            <span id="t-step4-title">04. Travel and start classes!</span> <span class="accordion-icon">+</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="guide-list bullet" id="t-step4-content">
+                                    <li><strong>Fly to the U.S.:</strong> Show the border officers your passport, visa, and Form I-20 to enter the country.</li>
+                                    <li><strong>Go to the School:</strong> Walk into DreamIT ESL in person before the "start date" written on your Form I-20.</li>
+                                    <li><strong>Take a Test:</strong> Take a placement test so the teachers know which English class is the perfect fit for you.</li>
+                                    <li><strong>Finish Paying & Sign Up:</strong> Pick your classes and complete any remaining tuition payments.</li>
+                                    <li><strong>Go to Orientation:</strong> Attend the welcome meeting, get your student handbook, and start your first day of school!</li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </section>
 
@@ -569,23 +636,18 @@
 
     <footer>
         <div class="container reveal">
-            <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 1rem;">DreamIT ESL</h2>
-            <p style="color: #666;">International Student Guide &copy; 2024</p>
+            <h2 style="font-family: var(--font-display); font-size: 2rem; margin-bottom: 0.5rem;">DreamIT ESL</h2>
+            <p style="opacity: 0.7;">International Student Guide &copy; 2024</p>
         </div>
     </footer>
 
     <script>
-        // Dual Cursor Logic (Dot + Glow)
+        // Custom Cursor Logic
         const dotCursor = document.getElementById('custom-cursor');
-        const glowCursor = document.getElementById('cursorGlow');
-        const hoverTargets = document.querySelectorAll('.hover-target, a, button');
-
+        
         document.addEventListener('mousemove', (e) => {
             dotCursor.style.left = e.clientX + 'px';
             dotCursor.style.top = e.clientY + 'px';
-            
-            glowCursor.style.left = e.clientX + 'px';
-            glowCursor.style.top = e.clientY + 'px';
         });
 
         function attachHoverEvents() {
@@ -596,14 +658,27 @@
         }
         attachHoverEvents();
 
-        // Header Scroll Effect
+        // Header Scroll & Background Video Crossfade
         const header = document.getElementById('main-header');
+        const topVideo = document.getElementById('bg-video-top');
+        const bottomVideo = document.getElementById('bg-video-bottom');
+
         window.addEventListener('scroll', () => {
+            // Header Blur
             if (window.scrollY > 50) {
                 header.classList.add('scrolled');
             } else {
                 header.classList.remove('scrolled');
             }
+
+            // Crossfade between Plane and Friend videos based on scroll percentage
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            let scrollPercent = docHeight > 0 ? scrollTop / docHeight : 0;
+            
+            // Adjust opacity to make transition smooth
+            topVideo.style.opacity = 1 - scrollPercent;
+            bottomVideo.style.opacity = scrollPercent;
         });
 
         // Scroll Reveal Animation
@@ -618,7 +693,7 @@
 
         document.querySelectorAll('.reveal').forEach(el => revealOnScroll.observe(el));
 
-        // Dynamic Theme Switching
+        // Dynamic Theme Switching (Updates Glass Panels over videos)
         const themeTriggers = document.querySelectorAll('[data-theme-trigger]');
         const body = document.body;
         
@@ -627,8 +702,8 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const theme = entry.target.getAttribute('data-theme-trigger');
-                    if (theme === 'dark') {
-                        body.setAttribute('data-theme', 'dark');
+                    if (theme === 'light') {
+                        body.setAttribute('data-theme', 'light');
                     } else {
                         body.removeAttribute('data-theme');
                     }
@@ -1004,7 +1079,7 @@
                 document.getElementById('t-step4-title').innerHTML = t.step4Title;
                 document.getElementById('t-step4-content').innerHTML = t.step4Content;
 
-                attachHoverEvents(); // Re-attach hover events to new HTML elements
+                attachHoverEvents(); 
                 
                 wrapper.style.opacity = 1;
             }, 400);
