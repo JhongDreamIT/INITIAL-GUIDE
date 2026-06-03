@@ -240,7 +240,7 @@
             transition: opacity 0.4s ease;
             display: flex;
             flex-direction: column;
-            gap: 6rem; /* Ensures strictly symmetrical gap between frameworks */
+            gap: 6rem; /* Ensures strictly symmetrical gap between frameworks on desktop */
             padding-bottom: 6rem; /* Spacing before the footer */
         }
 
@@ -253,6 +253,7 @@
 
         .section-pad {
             padding: 0; /* Padding removed so flex gap dictates exact spacing */
+            margin: 0;
         }
 
         .glass-panel {
@@ -288,6 +289,7 @@
             text-align: center;
             position: relative;
             padding-top: 5rem;
+            margin: 0;
         }
 
         .hero h1 {
@@ -442,6 +444,7 @@
             overflow: hidden;
             white-space: nowrap;
             padding: 4rem 0;
+            margin: 0;
             border-top: 1px solid var(--glass-border);
             border-bottom: 1px solid var(--glass-border);
             background: var(--glass-bg);
@@ -490,7 +493,20 @@
         }
         
         @media (max-width: 768px) {
-            #content-wrapper { gap: 4rem; padding-bottom: 4rem; } /* Even symmetric spacing for mobile */
+            /* PERFECTLY SYMMETRICAL EVEN SPACING FOR MOBILE */
+            #content-wrapper { 
+                gap: 3rem; 
+                padding-bottom: 3rem; 
+            } 
+            .section-pad {
+                padding: 0;
+                margin: 0;
+            }
+            .marquee-wrapper { 
+                padding: 1.5rem 0; /* Prevents the marquee from appearing as a disproportionately huge block on mobile */
+                margin: 0;
+            }
+            
             header { padding: 1rem 1.5rem; gap: 1rem; }
             .nav-scroll { justify-content: flex-start; }
             .hero h1 { font-size: 3.2rem; }
@@ -501,12 +517,13 @@
             .guide-list li { font-size: 1.05rem; }
             .marquee span { font-size: 2rem; }
             .cursor { display: none; } /* Hide custom cursor on mobile */
-            .glass-panel { padding: 2rem 1.5rem; border-radius: 16px; }
+            .glass-panel { padding: 2rem 1.5rem; border-radius: 16px; margin: 0; }
         }
     </style>
 </head>
 <body>
 
+    <!-- Visible Background Video Layer -->
     <div class="video-background">
         <video id="bg-video-top" autoplay loop muted playsinline>
             <source src="Plane.mp4" type="video/mp4">
@@ -517,8 +534,10 @@
         <div class="video-overlay"></div>
     </div>
 
+    <!-- Custom Dot Cursor (No floating bubble) -->
     <div class="cursor" id="custom-cursor"></div>
 
+    <!-- Header & Language Nav -->
     <header id="main-header">
         <div class="header-top">
             <a href="#" class="logo">DreamIT ESL</a>
@@ -538,6 +557,7 @@
 
     <main id="content-wrapper">
         
+        <!-- Hero Section -->
         <section class="hero container" data-theme-trigger="light">
             <div>
                 <h1 class="hero-title" id="t-hero-title">
@@ -548,6 +568,7 @@
             </div>
         </section>
 
+        <!-- Critical Rule Section (Box 1) -->
         <section class="section-pad container reveal" data-theme-trigger="dark">
             <div class="glass-panel">
                 <h2 class="section-header" id="t-warn-title">⚠️ Critical Rule</h2>
@@ -556,6 +577,7 @@
             </div>
         </section>
 
+        <!-- Marquee Divider -->
         <section class="marquee-wrapper reveal" data-theme-trigger="dark">
             <div class="marquee">
                 <span>PDF FORMAT ONLY</span> <span>ENGLISH TRANSLATIONS REQUIRED</span> <span>READ CATALOG</span>
@@ -563,6 +585,7 @@
             </div>
         </section>
 
+        <!-- Step by Step Accordion (Box 2) -->
         <section class="section-pad container reveal" data-theme-trigger="light">
             <div class="glass-panel">
                 <h2 class="section-header" id="t-steps-main">The Step-by-Step Process</h2>
