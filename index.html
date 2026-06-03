@@ -233,27 +233,27 @@
         }
 
         /* Layout & Glass Containers */
-        
-        /* Flexbox structure on content wrapper to guarantee PERFECTLY EVEN spacing between frameworks */
         #content-wrapper {
             opacity: 1;
             transition: opacity 0.4s ease;
             display: flex;
             flex-direction: column;
+            align-items: center; /* Forces all flex children to center horizontally */
             gap: 6rem; /* Ensures strictly symmetrical gap between frameworks on desktop */
             padding-bottom: 6rem; /* Spacing before the footer */
+            width: 100%;
         }
 
         .container {
             max-width: 1000px;
-            margin: 0 auto;
+            margin: 0 auto !important; /* Fixes left-align bug: prevents overriding of centered margins */
             padding: 0 4rem;
             width: 100%;
         }
 
         .section-pad {
-            padding: 0; /* Padding removed so flex gap dictates exact spacing */
-            margin: 0;
+            padding: 0; 
+            margin: 0 auto; /* Forces horizontal centering */
         }
 
         .glass-panel {
@@ -265,6 +265,9 @@
             padding: 3.5rem;
             box-shadow: var(--glass-shadow);
             transition: background 0.8s var(--transition-smooth), border-color 0.8s var(--transition-smooth), color 0.8s var(--transition-smooth);
+            text-align: center; /* Center alignment globally for the panel */
+            margin: 0 auto;
+            width: 100%;
         }
 
         /* Reveal Animations */
@@ -289,7 +292,7 @@
             text-align: center;
             position: relative;
             padding-top: 5rem;
-            margin: 0;
+            margin: 0 auto; /* Prevents overriding horizontal centering */
         }
 
         .hero h1 {
@@ -359,7 +362,7 @@
         .accordion {
             border-top: 2px solid var(--text-color);
             margin-top: 3rem;
-            text-align: left;
+            text-align: center; /* Center alignment */
         }
 
         .accordion-item {
@@ -371,8 +374,9 @@
             width: 100%;
             padding: 2.5rem 0;
             display: flex;
-            justify-content: space-between;
+            justify-content: center; /* Center alignment */
             align-items: center;
+            gap: 1rem; /* Space between text and icon */
             background: none;
             border: none;
             font-family: var(--font-display);
@@ -380,7 +384,7 @@
             font-weight: 600;
             color: var(--text-color);
             transition: opacity 0.3s ease;
-            text-align: left;
+            text-align: center;
         }
 
         .accordion-header:hover { opacity: 0.7; }
@@ -403,6 +407,8 @@
 
         .guide-list {
             list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
         .guide-list li {
@@ -410,14 +416,15 @@
             font-size: 1.15rem;
             line-height: 1.6;
             margin-bottom: 1.5rem;
-            padding-left: 1.8rem;
+            padding-left: 0;
+            text-align: center; /* Center alignment */
             opacity: 0.9;
         }
 
         .guide-list.bullet li::before {
             content: "•";
-            position: absolute;
-            left: 0;
+            position: relative;
+            margin-right: 0.5rem;
             color: var(--text-color);
             font-weight: bold;
         }
@@ -426,25 +433,32 @@
 
         .sub-list {
             margin-top: 0.75rem;
-            padding-left: 1rem;
-            border-left: 2px solid var(--accent-color);
+            padding-left: 0;
+            border-left: none; /* Removed accent border for centered layout */
             list-style: none;
+            text-align: center;
         }
 
         .sub-list li {
-            padding-left: 1rem;
+            padding-left: 0;
             margin-bottom: 0.5rem;
             font-size: 1.05rem;
+            text-align: center;
         }
         
-        .sub-list li::before { content: "-"; color: var(--text-color); }
+        .sub-list li::before { 
+            content: "-"; 
+            color: var(--text-color); 
+            margin-right: 0.5rem;
+        }
 
         /* Marquee */
         .marquee-wrapper {
+            width: 100vw; /* Keep marquee spanning the full window width */
             overflow: hidden;
             white-space: nowrap;
             padding: 4rem 0;
-            margin: 0;
+            margin: 0 auto;
             border-top: 1px solid var(--glass-border);
             border-bottom: 1px solid var(--glass-border);
             background: var(--glass-bg);
@@ -475,6 +489,7 @@
 
         /* Footer */
         footer {
+            width: 100%;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -497,14 +512,18 @@
             #content-wrapper { 
                 gap: 3rem; 
                 padding-bottom: 3rem; 
+                align-items: center; /* Enforces horizontal centering on mobile as well */
             } 
+            .container {
+                margin: 0 auto !important; /* Prevents overriding on mobile */
+            }
             .section-pad {
                 padding: 0;
-                margin: 0;
+                margin: 0 auto !important; /* Forces centering */
             }
             .marquee-wrapper { 
-                padding: 1.5rem 0; /* Prevents the marquee from appearing as a disproportionately huge block on mobile */
-                margin: 0;
+                padding: 1.5rem 0; 
+                margin: 0 auto;
             }
             
             header { padding: 1rem 1.5rem; gap: 1rem; }
@@ -513,17 +532,16 @@
             .hero-subtitle { font-size: 1.1rem; padding: 0 1rem; }
             .section-header { font-size: 2.2rem; }
             .section-intro { font-size: 1.1rem; }
-            .accordion-header { font-size: 1.4rem; padding: 2rem 0; }
+            .accordion-header { font-size: 1.4rem; padding: 2rem 0; justify-content: center; gap: 0.5rem; }
             .guide-list li { font-size: 1.05rem; }
             .marquee span { font-size: 2rem; }
             .cursor { display: none; } /* Hide custom cursor on mobile */
-            .glass-panel { padding: 2rem 1.5rem; border-radius: 16px; margin: 0; }
+            .glass-panel { padding: 2rem 1.5rem; border-radius: 16px; margin: 0 auto !important; width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Visible Background Video Layer -->
     <div class="video-background">
         <video id="bg-video-top" autoplay loop muted playsinline>
             <source src="Plane.mp4" type="video/mp4">
@@ -534,10 +552,8 @@
         <div class="video-overlay"></div>
     </div>
 
-    <!-- Custom Dot Cursor (No floating bubble) -->
     <div class="cursor" id="custom-cursor"></div>
 
-    <!-- Header & Language Nav -->
     <header id="main-header">
         <div class="header-top">
             <a href="#" class="logo">DreamIT ESL</a>
@@ -557,7 +573,6 @@
 
     <main id="content-wrapper">
         
-        <!-- Hero Section -->
         <section class="hero container" data-theme-trigger="light">
             <div>
                 <h1 class="hero-title" id="t-hero-title">
@@ -568,7 +583,6 @@
             </div>
         </section>
 
-        <!-- Critical Rule Section (Box 1) -->
         <section class="section-pad container reveal" data-theme-trigger="dark">
             <div class="glass-panel">
                 <h2 class="section-header" id="t-warn-title">⚠️ Critical Rule</h2>
@@ -577,7 +591,6 @@
             </div>
         </section>
 
-        <!-- Marquee Divider -->
         <section class="marquee-wrapper reveal" data-theme-trigger="dark">
             <div class="marquee">
                 <span>PDF FORMAT ONLY</span> <span>ENGLISH TRANSLATIONS REQUIRED</span> <span>READ CATALOG</span>
@@ -585,7 +598,6 @@
             </div>
         </section>
 
-        <!-- Step by Step Accordion (Box 2) -->
         <section class="section-pad container reveal" data-theme-trigger="light">
             <div class="glass-panel">
                 <h2 class="section-header" id="t-steps-main">The Step-by-Step Process</h2>
